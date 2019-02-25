@@ -18,14 +18,7 @@ namespace Game.Lobby
         public GameObject PlayerStatusBoxPrefab;
         public GameObject ListPlayersinRoomContainer;
         private List<PlayerListObject> PlayerListObjects;
-        /// <summary>
-        /// Start is called on the frame when a script is enabled just before
-        /// any of the Update methods is called the first time.
-        /// </summary>
-        void Start()
-        {
-            PlayerListObjects = new List<PlayerListObject>();
-        }
+        
         /// <summary>
         /// This function is called when the object becomes enabled and active.
         /// </summary>
@@ -81,7 +74,12 @@ namespace Game.Lobby
 
         private void DeletePlayer(MultiplayerManager.StatusPlayer status)
         {
+            Debug.Log("DeletePlayer ");
             PlayerListObject listObject = PlayerListObjects.Find(x => x.Status.OnlinePlayerStatus.UserId == status.OnlinePlayerStatus.UserId);
+            foreach(PlayerListObject obj in PlayerListObjects)
+            {
+                Debug.Log("DeletePlayer ->" + obj.Status.OnlinePlayerStatus.NickName);
+            }
             Destroy( listObject.ListObject);
             PlayerListObjects.Remove(listObject);
         }

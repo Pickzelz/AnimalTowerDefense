@@ -124,6 +124,7 @@ namespace Multiplayer
 
         public void RegisterOnListRoomChange(ListRoomChangeCallback callback)
         {
+            Debug.Log("RegisterOnListRoomChange");
             _OnListRoomChange += callback;
         }
 
@@ -203,6 +204,11 @@ namespace Multiplayer
         public void SetPlayerName(string name)
         {
             PhotonNetwork.NickName = name;
+        }
+
+        public string GetPlayerName()
+        {
+            return PhotonNetwork.NickName;
         }
 
         // void StatusUpdate()
