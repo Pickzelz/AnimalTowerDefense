@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Realtime;
+using Multiplayer;
 
 namespace Game.Lobby
 {
@@ -17,12 +18,19 @@ namespace Game.Lobby
         public void DrawListRoom(RoomInfo info)
         {
             if(info.Name != RoomNameText.text)
+            {
                 RoomNameText.text = info.Name;
+            }
             if(info.PlayerCount != _totalPlayerJoined)
             {
                 TotalPlayerJoinedText.text = info.PlayerCount.ToString() + "/" + info.MaxPlayers.ToString();
                 _totalPlayerJoined = info.PlayerCount;
             }
+        }
+
+        public void JoinRoom()
+        {
+            MultiplayerManager.Instance.JoinRoom(RoomNameText.text);
         }
     }
 }

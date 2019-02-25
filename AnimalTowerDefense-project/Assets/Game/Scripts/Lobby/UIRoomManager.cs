@@ -17,6 +17,8 @@ namespace Game.Lobby
         public Button CreateRoomButton;
         public GameObject ListRoomObjectPrefab;
         public GameObject ListRoomsContainer;
+        public GameObject RoomLobby;
+        public GameObject LobbyContainer;
 
         public float ListHeight = 30;
         // Start is called before the first frame update
@@ -27,6 +29,7 @@ namespace Game.Lobby
             ListRooms = new List<ListRoomStruct>();
 
             MultiplayerManager.Instance.RegisterOnListRoomChange(RoomChangeCallback);
+            MultiplayerManager.Instance.RegisterOnPlayerJoinedRoom(OnPlayerJoinedSomeRoom);
             MultiplayerManager.Instance.JoinLobby();
         }
 
@@ -71,6 +74,12 @@ namespace Game.Lobby
         {
             string roomName = RoomNameField.text;
             MultiplayerManager.Instance.CreateRoom(roomName);
+        }
+
+        public void OnPlayerJoinedSomeRoom()
+        {
+            RoomLobby.SetActive(true);
+            LobbyContainer.SetActive(false);
         }
 
         private void addNewListRooms(RoomInfo info)
