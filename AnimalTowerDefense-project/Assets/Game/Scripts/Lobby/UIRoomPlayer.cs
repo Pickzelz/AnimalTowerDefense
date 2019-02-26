@@ -1,21 +1,55 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Multiplayer;
+using Heroes = GameManager.AnimalHero;
 
-public class UIRoomPlayer : MonoBehaviour
+namespace Game.Lobby
 {
-    private string UserID;
-    public Text PlayerNameObject;
-
-    public void DrawObject(MultiplayerManager.StatusPlayer status)
+    public class UIRoomPlayer : MonoBehaviour
     {
-        if(PlayerNameObject.text != status.OnlinePlayerStatus.NickName)
+        private string UserID = null;
+        private Heroes? _hero = null;
+        public Text PlayerNameObject;
+        [HideInInspector] public GameObject HeroSelectionPanel;
+        public Button ChangeHeroButton;
+        public Text HeroName;
+         /// <summary>
+        /// This function is called when the object becomes enabled and active.
+        /// </summary>
+        
+        public void DrawObject(MultiplayerManager.StatusPlayer status)
         {
-            PlayerNameObject.text = status.OnlinePlayerStatus.NickName;
+            if(PlayerNameObject.text != status.OnlinePlayerStatus.NickName)
+            {
+                PlayerNameObject.text = status.OnlinePlayerStatus.NickName;
+            }
+            if(UserID != status.OnlinePlayerStatus.UserId)
+            {
+                UserID = status.OnlinePlayerStatus.UserId;
+            }
+            if(status.HeroSelectedbyPlayer != null)
+            {
+                if(_hero == null)
+                {
+                    _hero = status.HeroSelectedbyPlayer;
+                    HeroName.text = ((Heroes)_hero).Name;
+                }
+                else if(((Heroes)_hero).Name != ((Heroes)status.HeroSelectedbyPlayer).Name)
+                {
+                    _hero = status.HeroSelectedbyPlayer;
+                    HeroName.text = ((Heroes)_hero).Name;
+                }
+            }
+            
         }
-        if(UserID != status.OnlinePlayerStatus.UserId)
+
+        public void GotoHeroSelection()
         {
-            UserID = status.OnlinePlayerStatus.UserId;
+            if(UserID == MultiplayerManager.Instance.GetPlayerID())
+            {
+                HeroSelectionPanel.SetActive(true);
+            }
         }
     }
+    
 }

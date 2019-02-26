@@ -7,18 +7,12 @@ namespace Game.Lobby
     public class UIHeroSelection : MonoBehaviour
     {
         [System.Serializable]
-        public struct AnimalHero
-        {
-            public string Name;
-        }
-
+        
         public struct AnimalHeroList
         {
-            public AnimalHero Hero;
+            public GameManager.AnimalHero Hero;
             public GameObject HeroObject;
         }
-        public List<AnimalHero> Heroes;
-        [HideInInspector] public AnimalHero ChoosenHero;
         public GameObject ListBoxPrefab;
         public GameObject ListHeroesContainer;
         public List<AnimalHeroList> ListHeroes;
@@ -33,7 +27,7 @@ namespace Game.Lobby
 
         private void ShowListHeroes()
         {
-            foreach (AnimalHero hero in Heroes)
+            foreach (GameManager.AnimalHero hero in GameManager.Instance.Heroes)
             {
                 if(ListHeroes.Count == 0 )
                 {
@@ -46,11 +40,12 @@ namespace Game.Lobby
             }
         }
 
-        public void AddNewHero(AnimalHero hero)
+        public void AddNewHero(GameManager.AnimalHero hero)
         {
             GameObject obj = Instantiate(ListBoxPrefab, ListHeroesContainer.transform);
             UIHeroBox box = obj.GetComponent<UIHeroBox>();
             box.Draw(hero);
+            box.HeroSelectionContainer = gameObject;
             AnimalHeroList list = new AnimalHeroList();
             list.Hero = hero;
             list.HeroObject = obj;

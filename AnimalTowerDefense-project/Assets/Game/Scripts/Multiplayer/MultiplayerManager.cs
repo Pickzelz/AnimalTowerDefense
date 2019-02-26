@@ -3,6 +3,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using Game.Lobby;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Heroes = GameManager.AnimalHero;
 
 namespace Multiplayer
 {
@@ -19,7 +21,7 @@ namespace Multiplayer
         public class StatusPlayer
         {
             public Player OnlinePlayerStatus;
-            public UIHeroSelection.AnimalHero? HeroSelectedbyPlayer;
+            public Heroes? HeroSelectedbyPlayer;
 
             public bool isLeave;
 
@@ -51,6 +53,9 @@ namespace Multiplayer
         
         [SerializeField] private byte maxPlayerInRoom = 4;
 
+#endregion
+#region constant variable
+        public const string PLAYER_HERO_SELECTED = "HeroSelectedByPlayer"; //key for hero selected by player
 #endregion
 
 #region event
@@ -211,6 +216,11 @@ namespace Multiplayer
             return PhotonNetwork.NickName;
         }
 
+        public string GetPlayerID()
+        {
+            return PhotonNetwork.LocalPlayer.UserId;
+        }
+
         // void StatusUpdate()
         // {
         //     if(_prevStat == Status)
@@ -260,6 +270,23 @@ namespace Multiplayer
         {
             return PhotonNetwork.CurrentRoom;
         }
+
+        public void SendPlayerInformation(string key, string value)
+        {
+            // Hashtable hash = new Hashtable();
+            // hash.Add(PLAYER_HERO_SELECTED, value);
+
+            // PhotonNetwork.SetPlayerCustomProperties(hash);
+        }
+
+        public void PlayerSelectHero(Heroes hero)
+        {
+            Hashtable hash = new Hashtable();
+            hash.Add(PLAYER_HERO_SELECTED, hero.Name);
+
+            PhotonNetwork.SetPlayerCustomProperties(hash);
+        }
+
 #endregion        
 
 #region Photon callback
@@ -334,6 +361,22 @@ namespace Multiplayer
                 if(_UpdatePlayerInRoom != null)
                     _UpdatePlayerInRoom(Players);
                 Players.Remove(pl);
+            }
+        }
+
+        public override void OnPlayerPropertiesUpdate(Player target, Hashtable changedProps)
+        {
+            Debug.Log("Change properties");
+            if(Players.Exists(x => x.OnlinePlayerStatus.UserId == target.UserId) && GameManager.Instance.Heroes.Exists(x => x.Name == changedProps[PLAYER_HERO_SELECTED].ToString()))
+            {
+                StatusPlayer player = Players.Find( x => x.OnlinePlayerStatus.UserId == target.UserId);
+                player.OnlinePlayerStatus = target;
+                
+                player.HeroSelectedbyPlayer = GameManager.Instance.Heroes.Find(x => x.Name == changedProps[PLAYER_HERO_SELECTED].ToString());
+                player.isChanged = true;
+                if(_UpdatePlayerInRoom != null)
+                    _UpdatePlayerInRoom(Players);
+                player.isChanged = false;
             }
         }
 #endregion

@@ -18,6 +18,7 @@ namespace Game.Lobby
         public GameObject PlayerStatusBoxPrefab;
         public GameObject ListPlayersinRoomContainer;
         private List<PlayerListObject> PlayerListObjects;
+        public GameObject HeroSelectionObject;
         
         /// <summary>
         /// This function is called when the object becomes enabled and active.
@@ -58,6 +59,7 @@ namespace Game.Lobby
             GameObject listObject = Instantiate(PlayerStatusBoxPrefab, ListPlayersinRoomContainer.transform);
             UIRoomPlayer roomPlayer = listObject.GetComponent<UIRoomPlayer>();
             roomPlayer.DrawObject(status);
+            roomPlayer.HeroSelectionPanel = HeroSelectionObject;
             PlayerListObject obj = new PlayerListObject();
             obj.ListObject = listObject;
             obj.Status = status;
@@ -84,5 +86,9 @@ namespace Game.Lobby
             PlayerListObjects.Remove(listObject);
         }
 
+        public void OpenHeroSelection()
+        {
+            
+        }
     }    
 }

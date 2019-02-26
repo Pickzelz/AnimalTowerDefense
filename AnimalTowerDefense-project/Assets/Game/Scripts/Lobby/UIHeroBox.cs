@@ -1,26 +1,26 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Multiplayer;
 
 namespace Game.Lobby
 {
     public class UIHeroBox : MonoBehaviour
     {
         public Text HeroNameText;
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
+        [HideInInspector] public GameObject HeroSelectionContainer;
 
-        // Update is called once per frame
-        void Update()
-        {
-            
-        }
+        private GameManager.AnimalHero HeroProperty;
 
-        public void Draw(UIHeroSelection.AnimalHero hero)
+        public void Draw(GameManager.AnimalHero hero)
         {
             HeroNameText.text = hero.Name;
+            HeroProperty = hero;
+        }
+
+        public void SelectThisHero()
+        {
+            MultiplayerManager.Instance.PlayerSelectHero(HeroProperty);
+            HeroSelectionContainer.SetActive(false);
         }
     }
 
