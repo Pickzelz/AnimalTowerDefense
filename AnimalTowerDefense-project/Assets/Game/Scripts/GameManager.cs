@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace ATD
 {
+    public class GameManager : MonoBehaviour
+    {
 
+    }
 }
