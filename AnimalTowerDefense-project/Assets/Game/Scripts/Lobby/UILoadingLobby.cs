@@ -15,7 +15,7 @@ namespace Game.Lobby
         // Update is called once per frame
         void Update()
         {
-            if(this.gameObject.activeSelf && MultiplayerManager.Instance.Status == Multiplayer.MultiplayerManager.Stat.CONNECTED)
+            if(this.gameObject.activeSelf && MultiplayerManager.Instance.Status >= Multiplayer.MultiplayerManager.Stat.CONNECTED)
             {
                 UILobbyObject.SetActive(true);
                 this.gameObject.SetActive(false);

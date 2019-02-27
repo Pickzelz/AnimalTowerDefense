@@ -32,12 +32,14 @@ namespace Game.Lobby
                 if(_hero == null)
                 {
                     _hero = status.HeroSelectedbyPlayer;
-                    HeroName.text = ((Heroes)_hero).Name;
+                    string names = ((Heroes)_hero).Name;
+                    HeroName.text = names;
                 }
                 else if(((Heroes)_hero).Name != ((Heroes)status.HeroSelectedbyPlayer).Name)
                 {
                     _hero = status.HeroSelectedbyPlayer;
-                    HeroName.text = ((Heroes)_hero).Name;
+                    string names = ((Heroes)_hero).Name;
+                    HeroName.text = names;
                 }
             }
             

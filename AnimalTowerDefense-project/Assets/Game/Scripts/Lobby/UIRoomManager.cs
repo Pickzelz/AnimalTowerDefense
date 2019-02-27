@@ -23,20 +23,26 @@ namespace Game.Lobby
         public float ListHeight = 30;
         // Start is called before the first frame update
 
-        private List<ListRoomStruct> ListRooms;
-        void Start()
+        private List<ListRoomStruct> ListRooms = null;
+        /// <summary>
+        /// This function is called when the object becomes enabled and active.
+        /// </summary>
+        void OnEnable()
         {
-            ListRooms = new List<ListRoomStruct>();
-
+            if(ListRooms == null)
+                ListRooms = new List<ListRoomStruct>();
+            Debug.Log("Room manager is enabled");
             MultiplayerManager.Instance.RegisterOnListRoomChange(RoomChangeCallback);
             MultiplayerManager.Instance.RegisterOnPlayerJoinedRoom(OnPlayerJoinedSomeRoom);
-            MultiplayerManager.Instance.JoinLobby();
         }
 
-        // Update is called once per frame
-        void Update()
+        /// <summary>
+        /// This function is called when the behaviour becomes disabled or inactive.
+        /// </summary>
+        void OnDisable()
         {
-            
+            MultiplayerManager.Instance.CleanOnListRoomChange();
+            MultiplayerManager.Instance.CleanOnPlayerJoinedCallback();
         }
         
         public void RoomChangeCallback(List<RoomInfo> rooms)
@@ -78,6 +84,8 @@ namespace Game.Lobby
 
         public void OnPlayerJoinedSomeRoom()
         {
+            CleanListRooms();
+
             RoomLobby.SetActive(true);
             LobbyContainer.SetActive(false);
         }
@@ -122,6 +130,19 @@ namespace Game.Lobby
             // Vector3 newPosition = bodyTransform.localPosition;
             // newPosition.y = 0.5f * bodyTransform.sizeDelta.y;
             // bodyTransform.localPosition = newPosition;
+        }
+
+        private void CleanListRooms()
+        {
+            if(ListRooms.Count <= 0)
+                return;
+            foreach(ListRoomStruct info in ListRooms)
+            {
+                Destroy(info.ObjectListRoom);
+                
+            }
+
+            ListRooms.Clear();
         }
     }
 

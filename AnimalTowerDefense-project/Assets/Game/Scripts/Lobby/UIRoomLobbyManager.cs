@@ -19,7 +19,8 @@ namespace Game.Lobby
         public GameObject ListPlayersinRoomContainer;
         private List<PlayerListObject> PlayerListObjects;
         public GameObject HeroSelectionObject;
-        
+        public GameObject LobbyRoomObject;
+        public GameObject DetailRoomContainer;
         /// <summary>
         /// This function is called when the object becomes enabled and active.
         /// </summary>
@@ -33,6 +34,15 @@ namespace Game.Lobby
             }
 
             MultiplayerManager.Instance.RegisterOnPlayerInRoomChanged(OnPlayerChanged);
+            MultiplayerManager.Instance.RegisterOnPlayerLeaveRoomCallback(OnLeaveRoom);
+        }
+
+        /// <summary>
+        /// This function is called when the behaviour becomes disabled or inactive.
+        /// </summary>
+        void OnDisable()
+        {
+            MultiplayerManager.Instance.CleanOnTotalPlayerinRoomChange();
         }
 
         public void OnPlayerChanged(List<MultiplayerManager.StatusPlayer> players)
@@ -89,6 +99,29 @@ namespace Game.Lobby
         public void OpenHeroSelection()
         {
             
+        }
+
+        public void LeaveRoom()
+        {
+            
+            MultiplayerManager.Instance.LeaveRoom();
+        }
+
+        public void OnLeaveRoom()
+        {
+            CleanListPlayer();
+            LobbyRoomObject.SetActive(true);
+            DetailRoomContainer.SetActive(false);
+        }
+
+        private void CleanListPlayer()
+        {
+            foreach(PlayerListObject obj in PlayerListObjects)
+            {
+                Destroy(obj.ListObject);
+            }
+
+            PlayerListObjects.Clear();
         }
     }    
 }

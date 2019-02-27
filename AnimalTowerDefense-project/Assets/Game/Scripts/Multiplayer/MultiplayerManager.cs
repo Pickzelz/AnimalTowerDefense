@@ -287,6 +287,11 @@ namespace Multiplayer
             PhotonNetwork.SetPlayerCustomProperties(hash);
         }
 
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom(true);
+        }
+
 #endregion        
 
 #region Photon callback
@@ -294,6 +299,8 @@ namespace Multiplayer
         {
             Debug.Log("PUN Basics Tutorial/Launcer: OnConnectedtoMaster() was called");
             Status = Stat.CONNECTED;
+            JoinLobby();
+
             //PhotonNetwork.JoinRandomRoom();
         }
 
@@ -317,6 +324,7 @@ namespace Multiplayer
 
         public override void OnLeftRoom()
         {
+            Debug.Log("Player Leave Room");
             if(_OnLeaveRoom != null)
                 _OnLeaveRoom();
         }
