@@ -1,14 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Dictus;
+using Multiplayer;
 
 namespace ATD
 {
-    public class Character : MonoBehaviour, IControllable
+    public class Character : MonoBehaviour, IControllable, IMultiplayerPlayerObject
     {
         [SerializeField] private float moveSpeed_ = 1;
         private ActionSet actionSet_;
         private Vector3 movementVector_ = Vector3.zero;
+        private bool isLocalPlayer = true;
 
         private void Awake()
         {
@@ -23,7 +25,14 @@ namespace ATD
 
         private void Update()
         {
+            if(!isLocalPlayer)
+                return;
             Move(movementVector_, Time.deltaTime);
+        }
+
+        public void WhenNotMine()
+        {
+            isLocalPlayer = false;
         }
 
         public void RegisterToAdapter()

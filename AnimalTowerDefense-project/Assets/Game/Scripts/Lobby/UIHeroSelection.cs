@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Heroes = ATD.GameManager.AnimalHero;
+using ATD;
 
 namespace Game.Lobby
 {
@@ -10,7 +12,7 @@ namespace Game.Lobby
         
         public struct AnimalHeroList
         {
-            public GameManager.AnimalHero Hero;
+            public Heroes Hero;
             public GameObject HeroObject;
         }
         public GameObject ListBoxPrefab;
@@ -27,7 +29,7 @@ namespace Game.Lobby
 
         private void ShowListHeroes()
         {
-            foreach (GameManager.AnimalHero hero in GameManager.Instance.Heroes)
+            foreach (Heroes hero in GameManager.Instance.Heroes)
             {
                 if(ListHeroes.Count == 0 )
                 {

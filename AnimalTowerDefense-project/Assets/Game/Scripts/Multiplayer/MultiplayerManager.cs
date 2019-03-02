@@ -4,7 +4,8 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using Game.Lobby;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using Heroes = GameManager.AnimalHero;
+using Heroes = ATD.GameManager.AnimalHero;
+using ATD;
 
 namespace Multiplayer
 {
@@ -79,6 +80,7 @@ namespace Multiplayer
 
         void Awake()
         {
+            DontDestroyOnLoad(gameObject);
 #region singleton
             Instance = this;
 #endregion

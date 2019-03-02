@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour where T : Component{
+namespace ATD
+{
+    public abstract class Singleton<T> : MonoBehaviour where T : Component{
 
     protected static T m_sInstance;
     protected static bool m_isValid;
@@ -67,4 +69,5 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component{
     }
 
     protected abstract void Init();
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Multiplayer;
-using Heroes = GameManager.AnimalHero;
+using Heroes = ATD.GameManager.AnimalHero;
 
 namespace Game.Lobby
 {

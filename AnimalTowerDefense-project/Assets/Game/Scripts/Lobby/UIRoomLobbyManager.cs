@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Multiplayer;
 using Photon.Realtime;
 
@@ -122,6 +123,11 @@ namespace Game.Lobby
             }
 
             PlayerListObjects.Clear();
+        }
+
+        public void StartGame()
+        {
+            SceneManager.LoadScene(1);
         }
     }    
 }
