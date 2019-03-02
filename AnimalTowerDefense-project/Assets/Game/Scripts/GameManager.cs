@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
-{
-    [System.Serializable]
-    public struct AnimalHero
+namespace ATD{
+    public class GameManager : Singleton<GameManager>
     {
-        public string Name;
+        [System.Serializable]
+        public struct AnimalHero
+        {
+            public string Name;
+        }
+
+        public List<AnimalHero> Heroes;
+
+        protected override void Init()
+        {}
     }
-
-    public List<AnimalHero> Heroes;
-
-    protected override void Init()
-    {}
 }
+
