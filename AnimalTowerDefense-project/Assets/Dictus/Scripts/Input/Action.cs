@@ -8,6 +8,7 @@ namespace Dictus
         public delegate void KeyDownDelegatedAction();
         public delegate void KeyUpDelegatedAction();
         public delegate void KeyPressedDelegatedAction();
+        public delegate void ContinuousDelegatedAction(Vector3 mousePos);
         #endregion
 
         #region methods
@@ -18,6 +19,7 @@ namespace Dictus
             keyDownDelegatedAction = null;
             keyUpDelegatedAction = null;
             keyPressedDelegatedAction = null;
+            continuousDelegatedAction = null;
         }
 
         public Action(KeyCode key)
@@ -27,19 +29,27 @@ namespace Dictus
             keyDownDelegatedAction = null;
             keyUpDelegatedAction = null;
             keyPressedDelegatedAction = null;
+            continuousDelegatedAction = null;
         }
 
         public void SetKeyDownDelegatedAction(KeyDownDelegatedAction action)
         {
             keyDownDelegatedAction = action;
         }
+
         public void SetKeyUpDelegatedAction(KeyUpDelegatedAction action)
         {
             keyUpDelegatedAction = action;
         }
+
         public void SetKeyPressedDelegatedAction(KeyPressedDelegatedAction action)
         {
             keyPressedDelegatedAction = action;
+        }
+
+        public void SetContinuousDelegatedAction(ContinuousDelegatedAction action)
+        {
+            continuousDelegatedAction = action;
         }
 
         public void ExecuteKeyPressedAction()
@@ -57,12 +67,19 @@ namespace Dictus
             if (keyDownDelegatedAction != null)
                 keyDownDelegatedAction();
         }
+
+        public void ExecuteContinuosAction(Vector3 mousePos)
+        {
+            if(continuousDelegatedAction != null)
+                continuousDelegatedAction(mousePos);
+        } 
         #endregion
 
         #region members
         private KeyUpDelegatedAction keyUpDelegatedAction;
         private KeyDownDelegatedAction keyDownDelegatedAction;
         private KeyPressedDelegatedAction keyPressedDelegatedAction;
+        private ContinuousDelegatedAction continuousDelegatedAction;
         public float value { get; set; }
         public KeyCode associatedKey { get; set; }
         #endregion

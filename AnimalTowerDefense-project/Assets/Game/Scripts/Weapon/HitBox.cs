@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace ATD
 {
@@ -11,9 +12,14 @@ namespace ATD
         {
             inRange = new Collider[30];
         }
+        private void Start()
+        {
+            gameObject.SetActive(false);
+        }
 
         private void OnEnable()
         {
+            gameObject.SetActive(true);
             Scan();
         }
 
@@ -28,9 +34,14 @@ namespace ATD
                     damagee.TakeDamage(damage);
                 }
             }
-            gameObject.SetActive(false);
+            StartCoroutine(HideDelay());
         }
 
+        IEnumerator HideDelay()
+        {
+            yield return new WaitForSeconds(.1f);
+            gameObject.SetActive(false);
+        }
         //Should be set by the weapon
         public float damage { get; set; }
     }

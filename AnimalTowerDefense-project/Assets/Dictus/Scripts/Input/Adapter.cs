@@ -32,6 +32,7 @@ namespace Dictus
                     {
                         action.ExecuteKeyUpAction();
                     }
+                    action.ExecuteContinuosAction(Input.mousePosition);
                 }
             }
         }
