@@ -25,7 +25,7 @@ namespace ATD
 
         public void Scan()
         {
-            int inRangeCount = Physics.OverlapSphereNonAlloc(transform.localPosition, radius_, inRange);
+            int inRangeCount = Physics.OverlapSphereNonAlloc(transform.position, radius_, inRange);
             for (int i = 0; i < inRangeCount; i++)
             {
                 IDamageable damagee = inRange[i].GetComponent<IDamageable>();
@@ -41,6 +41,14 @@ namespace ATD
         {
             yield return new WaitForSeconds(.1f);
             gameObject.SetActive(false);
+        }
+
+        private void OnDrawGizmos()
+        {
+            if(!gameObject.activeInHierarchy)
+                return;
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(transform.position, radius_);
         }
         //Should be set by the weapon
         public float damage { get; set; }

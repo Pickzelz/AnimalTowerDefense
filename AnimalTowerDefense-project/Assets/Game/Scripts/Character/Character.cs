@@ -14,7 +14,7 @@ namespace ATD
         [SerializeField] private float health_;
         private ActionSet actionSet_;
         private Vector3 movementVector_ = Vector3.zero;
-        public bool isLocalPlayer = true;
+        private bool isLocalPlayer = true;
         private MeshRenderer mr_;
 
         private void Awake()
