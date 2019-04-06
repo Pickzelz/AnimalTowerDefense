@@ -162,7 +162,6 @@ MonoBehaviour:
   primaryWep_: {fileID: 2196224494683630387}
   secondaryWep_: {fileID: 1025105439519913555}
   health_: 100
-  isLocalPlayer: 1
 --- !u!1 &1025105439519913554
 GameObject:
   m_ObjectHideFlags: 0
