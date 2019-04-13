@@ -61,6 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1158ea6e18f6d94ab8c7b3caf990444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TimerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   CollectedItem: []
 --- !u!23 &448
 MeshRenderer:

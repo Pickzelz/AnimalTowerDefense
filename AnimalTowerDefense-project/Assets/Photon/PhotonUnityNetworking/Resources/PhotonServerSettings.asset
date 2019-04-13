@@ -35,5 +35,7 @@ MonoBehaviour:
   - RPCOnPlayerTakeItem
   - RPCDestroyItem
   - RPCAddItem
+  - Equip
+  - UseItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1

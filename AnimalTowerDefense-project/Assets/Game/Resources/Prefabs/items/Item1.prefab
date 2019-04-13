@@ -108,6 +108,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemName: Si Yellow
+  ChangeSpeedFactor: -3
+  Damage: 0
+  Range: 0
+  time: 1
+  ItemType: 1
 --- !u!54 &390468477361570477
 Rigidbody:
   m_ObjectHideFlags: 0

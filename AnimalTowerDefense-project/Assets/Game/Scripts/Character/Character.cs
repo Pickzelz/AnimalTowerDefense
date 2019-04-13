@@ -127,6 +127,11 @@ namespace ATD
             mr_.enabled = true;
         }
 
+        public void ChangeSpeed(float speedFactor)
+        {
+            moveSpeed_ += speedFactor;
+        }
+
         public ActionSet actionSet { get { return actionSet_; } }
         public float health { get { return health_; } }
     }

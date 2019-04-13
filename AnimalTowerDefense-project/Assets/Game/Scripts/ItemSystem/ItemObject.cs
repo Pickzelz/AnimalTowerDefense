@@ -7,21 +7,22 @@ namespace Game.Item
 {
     [System.Serializable]
     [RequireComponent(typeof(Rigidbody))]
-    public class ItemObject : MonoBehaviour
+    public class ItemObject : MonoBehaviour, IUseable
     {
-        public enum EItemType { TROWABLE, USEABLE, EQUIPABLE }
+        public enum EItemType { TROWABLE, USEABLE, EQUIPABLE, TRAP}
         public string ItemName;
 
-        // Start is called before the first frame update
-        void Start()
+        public float AddSpeedFactor;
+        public float Range;
+        public float time;
+        public float AddHealthFactor;
+
+        public EItemType ItemType;
+
+        private void Start()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            AddSpeedFactor = 0;
+            Range = 0;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -42,5 +43,18 @@ namespace Game.Item
             Destroy(gameObject);
         }
 
+
+        public void Use(ICanUseItem itemUser)
+        {
+            switch(ItemType)
+            {
+                case EItemType.EQUIPABLE:
+                    break;
+                case EItemType.TROWABLE:
+                    break;
+                case EItemType.USEABLE:
+                    break;
+            }
+        }
     }
 }

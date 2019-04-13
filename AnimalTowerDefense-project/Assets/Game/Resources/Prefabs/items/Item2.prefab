@@ -57,6 +57,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemName: Si Merah
+  ChangeSpeedFactor: 2
+  Damage: 0
+  Range: 0
+  time: 1
+  ItemType: 1
 --- !u!23 &6533783784173245585
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -1,7 +1,8 @@
 ﻿using Game.Item;
+using UnityEngine;
 
 public interface ICanUseItem
 {
     void TakeItem(ItemObject item);
-    void UseItem();
+    void UseItem(ItemObject item);
 }
