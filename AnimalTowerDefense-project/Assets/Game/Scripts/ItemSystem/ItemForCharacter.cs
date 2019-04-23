@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using Photon.Pun;
 using ATD;
 
@@ -11,65 +12,10 @@ namespace Game.Item
     [System.Serializable]
     public class ItemForCharacter : MonoBehaviourPunCallbacks, ICanEffectByItem, ICanUseItem
     {
-        public UnityEvent TimerEvent;
-
-        [System.Serializable]
-        public class ItemCollection
-        {
-            public delegate void EventRecover(ItemObject item);
-
-            public EventRecover recoverEvent;
-            public ItemObject item { get; private set; }
-            public int Quantity { get; private set; }
-            public bool IsEquiped { get; set; }
-
-            private float timer = 0;
-            private bool isEffectedByItem = false;
-
-            public ItemCollection(ItemObject item, int Quantity, ref UnityEvent events)
-            {
-                this.item = item;
-                this.Quantity = Quantity;
-                events.AddListener(TimerUpdate);
-                recoverEvent = null;
-            }
-
-            public void AddItem(int amount)
-            {
-                Quantity+=amount;
-                Debug.Log("ItemCollection : add item amount -> " + Quantity);
-            }
-
-            public void UseItem(int amount, EventRecover recoverCallback)
-            {
-                Quantity -= amount;
-                if(item.time > 0)
-                {
-                    timer = item.time;
-                    isEffectedByItem = true;
-                    recoverEvent = recoverCallback;
-                }
-            }
-
-            void TimerUpdate()
-            {
-                if(timer > 0)
-                {
-                    Debug.Log(item.name + " : " + timer);
-                    timer -= Time.deltaTime;
-                }
-                else
-                {
-                    if(isEffectedByItem)
-                    {
-                        recoverEvent(item);
-                        isEffectedByItem = false;
-                        recoverEvent = null;
-                    }
-                }
-            }
-        }
+        [HideInInspector] public UnityEvent TimerEvent;
         private Character _character;
+        public Canvas ItemContainer;
+
         public List<ItemCollection> CollectedItem;
         // Start is called before the first frame update
         void Start()
@@ -101,7 +47,7 @@ namespace Game.Item
                 ItemCollection collection = CollectedItem.Find(x => x.item.ItemName == itemName);
                 collection.AddItem(1);
                 Debug.Log("Total item in collection " + collection.Quantity);
-                UseItem(collection.item);
+                //UseItem(collection.item);
 
             }
             else
@@ -111,7 +57,7 @@ namespace Game.Item
                 ItemCollection collection = new ItemCollection(objectCpy, 1, ref TimerEvent);
 
                 CollectedItem.Add(collection);
-                UseItem(collection.item);
+                //UseItem(collection.item);
             }
         }
         

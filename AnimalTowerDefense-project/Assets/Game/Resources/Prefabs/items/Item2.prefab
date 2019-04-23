@@ -57,10 +57,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemName: Si Merah
-  ChangeSpeedFactor: 2
-  Damage: 0
+  UI: {fileID: 7573788424024922898, guid: b04108c3ab740dd46a8652c24a874ac6, type: 3}
+  AddSpeedFactor: 0
   Range: 0
   time: 1
+  AddHealthFactor: 0
   ItemType: 1
 --- !u!23 &6533783784173245585
 MeshRenderer:

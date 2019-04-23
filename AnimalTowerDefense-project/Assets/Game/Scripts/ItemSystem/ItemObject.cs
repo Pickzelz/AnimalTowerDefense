@@ -11,6 +11,7 @@ namespace Game.Item
     {
         public enum EItemType { TROWABLE, USEABLE, EQUIPABLE, TRAP}
         public string ItemName;
+        public ItemUI UI;
 
         public float AddSpeedFactor;
         public float Range;

@@ -108,10 +108,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemName: Si Yellow
-  ChangeSpeedFactor: -3
-  Damage: 0
+  UI: {fileID: 3328783847379518387, guid: 37bb26419fcee034c96f505aa5c8e906, type: 3}
+  AddSpeedFactor: 0
   Range: 0
   time: 1
+  AddHealthFactor: 0
   ItemType: 1
 --- !u!54 &390468477361570477
 Rigidbody:

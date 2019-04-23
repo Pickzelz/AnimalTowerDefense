@@ -108,10 +108,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemName: Si Blue
-  ChangeSpeedFactor: -1
-  Damage: 0
+  UI: {fileID: 468610444736433136, guid: 1efbf93c24257cd4bba7e3b779efb31a, type: 3}
+  AddSpeedFactor: 0
   Range: 0
   time: 1
+  AddHealthFactor: 0
   ItemType: 1
 --- !u!54 &8813327395879358567
 Rigidbody:
