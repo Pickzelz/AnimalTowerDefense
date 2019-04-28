@@ -20,6 +20,7 @@ namespace Game.Item
         {
             this.item = item;
             this.Quantity = Quantity;
+            UI = null;
             events.AddListener(TimerUpdate);
             recoverEvent = null;
         }
@@ -27,7 +28,6 @@ namespace Game.Item
         public void AddItem(int amount)
         {
             Quantity+=amount;
-            UI.TextAmount.text = Quantity.ToString();
             Debug.Log("ItemCollection : add item amount -> " + Quantity);
         }
 

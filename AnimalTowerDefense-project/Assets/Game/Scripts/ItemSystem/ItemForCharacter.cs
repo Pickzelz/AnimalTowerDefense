@@ -30,6 +30,14 @@ namespace Game.Item
             TimerEvent.Invoke();
         }
 
+        /// <summary>
+        /// This function is called when the MonoBehaviour will be destroyed.
+        /// </summary>
+        void OnDestroy()
+        {
+            TimerEvent.RemoveAllListeners();
+        }
+
         public void TakeItem(ItemObject item)
         {
             if (!photonView.IsMine)
@@ -42,9 +50,10 @@ namespace Game.Item
         [PunRPC]
         void RPCAddItem(string itemName, int amount)
         {
+            ItemCollection collection;
             if (CollectedItem.Exists(x => x.item.ItemName == itemName))
             {
-                ItemCollection collection = CollectedItem.Find(x => x.item.ItemName == itemName);
+                collection = CollectedItem.Find(x => x.item.ItemName == itemName);
                 collection.AddItem(1);
                 Debug.Log("Total item in collection " + collection.Quantity);
                 //UseItem(collection.item);
@@ -54,11 +63,13 @@ namespace Game.Item
             {
                 Debug.Log("Add new item ");
                 ItemObject objectCpy = ItemManager.Instance.Getitem(itemName);
-                ItemCollection collection = new ItemCollection(objectCpy, 1, ref TimerEvent);
+                collection = new ItemCollection(objectCpy, 1, ref TimerEvent);
 
                 CollectedItem.Add(collection);
                 //UseItem(collection.item);
             }
+            GameEvents.Instance.ETakeItemEvent.Invoke(collection);
+
         }
         
         public void UseItem(ItemObject item)
@@ -94,7 +105,7 @@ namespace Game.Item
 
             CurrentEquipedCollection.IsEquiped = false;
             collection.IsEquiped = true;
-
+            
         }
 
         [PunRPC]
@@ -104,6 +115,8 @@ namespace Game.Item
 
             _character.ChangeSpeed(collection.item.AddSpeedFactor);
             collection.UseItem(1, Recover);
+
+            GameEvents.Instance.EUseItemEvent.Invoke(collection);
         }
 
         void Recover(ItemObject item)

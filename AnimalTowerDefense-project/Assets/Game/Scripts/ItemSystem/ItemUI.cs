@@ -17,6 +17,11 @@ namespace Game.Item
         {
             
         }
+
+        public void SetTextAmount(int amount)
+        {
+            TextAmount.text = amount.ToString();
+        }
     }
 }
 
