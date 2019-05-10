@@ -13,7 +13,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        PhotonNetwork.Instantiate("Prefabs/"+PlayerPrefab.name, new Vector3(0f,1f,0f), Quaternion.identity, 0);
+        PhotonNetwork.Instantiate("Prefabs/Object/Character/"+PlayerPrefab.name, new Vector3(0f,1f,0f), Quaternion.identity, 0);
     }
 
 }

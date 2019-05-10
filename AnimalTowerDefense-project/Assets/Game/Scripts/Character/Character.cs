@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Dictus;
 using Multiplayer;
+using UnityEngine.Animations;
 
 namespace ATD
 {
     public class Character : MonoBehaviour, IDamageable, IControllable, IMultiplayerPlayerObject
     {
-        [SerializeField] private float moveSpeed_ = 1;
-        [SerializeField] private Weapon primaryWep_ = null;
-        [SerializeField] private Weapon secondaryWep_ = null;
+        [SerializeField] private float moveSpeed_ = 2;
+        //[SerializeField] private Weapon primaryWep_ = null;
+        //[SerializeField] private Weapon secondaryWep_ = null;
         [SerializeField] private float health_;
         private ActionSet actionSet_;
         private Vector3 movementVector_ = Vector3.zero;
         private bool isLocalPlayer = true;
         private MeshRenderer mr_;
+
+        public Animator Anim;
 
         private void Awake()
         {
@@ -48,6 +51,9 @@ namespace ATD
 
         private void SetCharacterActions()
         {
+            if (!isLocalPlayer)
+                return;
+
             actionSet["moveZ+"].SetKeyPressedDelegatedAction(() => { SetVerticalMovementValue(1); });
             actionSet["moveZ+"].SetKeyUpDelegatedAction(() => { SetVerticalMovementValue(0); });
 
@@ -89,30 +95,51 @@ namespace ATD
 
         private void Rotate(Vector3 mousePos)
         {
+            if (!isLocalPlayer)
+                return;
             Vector3 lookDir = Vector3.zero;
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
             if (Physics.Raycast(ray.origin, ray.direction, out hit))
             {
-                lookDir = hit.point;
+                if(hit.transform != transform)
+                { 
+                    lookDir = hit.point;
+                    lookDir.y = transform.localPosition.y;
+                    transform.LookAt(lookDir, Vector3.up);
+                    }
             }
-            lookDir.y = transform.localPosition.y;
-            transform.LookAt(lookDir, Vector3.up);
         }
+            
 
         private void FireWeapon()
         {
-            primaryWep_.SpawnHitboxes();
+            if (!isLocalPlayer)
+                return;
+            Anim.SetTrigger("IsAttacking");
+            //primaryWep_.SpawnHitboxes();
         }
 
         private void UseSkill()
         {
-            secondaryWep_.SpawnHitboxes();
+            //secondaryWep_.SpawnHitboxes();
         }
 
         private void Move(Vector3 direction, float deltaTime)
         {
+            if (!isLocalPlayer)
+                return;
             transform.localPosition = transform.localPosition + (direction * moveSpeed_ * deltaTime);
+            if (movementVector_ != Vector3.zero)
+            {
+                Anim.SetFloat("MovementSpeed", moveSpeed_);
+                Anim.speed = moveSpeed_/2;
+            }
+            else
+            {
+                Anim.SetFloat("MovementSpeed", 0f);
+
+            }
         }
 
         IEnumerator TakingDamageVisualImpl()

@@ -44,17 +44,27 @@ namespace Game.Item
                 return;
 
             PhotonView view = PhotonView.Get(this);
+            //ItemCollection collection = AddItem(item.ItemName, 1);
+            //GameEvents.Instance.ETakeItemEvent.Invoke(collection);
             view.RPC("RPCAddItem", RpcTarget.All, item.ItemName, 1);
+            
         }
 
         [PunRPC]
         void RPCAddItem(string itemName, int amount)
         {
+            ItemCollection collection = AddItem(itemName, amount);
+            if(photonView.IsMine)
+                GameEvents.Instance.ETakeItemEvent.Invoke(collection);
+        }
+
+        ItemCollection AddItem(string itemName, int amount)
+        {
             ItemCollection collection;
             if (CollectedItem.Exists(x => x.item.ItemName == itemName))
             {
                 collection = CollectedItem.Find(x => x.item.ItemName == itemName);
-                collection.AddItem(1);
+                collection.AddItem(amount);
                 Debug.Log("Total item in collection " + collection.Quantity);
                 //UseItem(collection.item);
 
@@ -63,13 +73,12 @@ namespace Game.Item
             {
                 Debug.Log("Add new item ");
                 ItemObject objectCpy = ItemManager.Instance.Getitem(itemName);
-                collection = new ItemCollection(objectCpy, 1, ref TimerEvent);
-
+                collection = new ItemCollection(objectCpy, 0, ref TimerEvent);
+                collection.AddItem(amount);
                 CollectedItem.Add(collection);
                 //UseItem(collection.item);
             }
-            GameEvents.Instance.ETakeItemEvent.Invoke(collection);
-
+            return collection;
         }
         
         public void UseItem(ItemObject item)
