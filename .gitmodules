@@ -1,0 +1,3 @@
+[submodule "AnimalTowerDefense-project/Assets/Editor/SceneManagement"]
+	path = AnimalTowerDefense-project/Assets/Editor/SceneManagement
+	url = https://github.com/Pickzelz/UnitySceneManagement.git

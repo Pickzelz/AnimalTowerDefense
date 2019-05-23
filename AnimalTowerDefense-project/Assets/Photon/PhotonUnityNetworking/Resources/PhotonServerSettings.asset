@@ -37,5 +37,7 @@ MonoBehaviour:
   - RPCAddItem
   - Equip
   - UseItem
+  - OnDeath
+  - RPCOnDeath
   DisableAutoOpenWizard: 1
   ShowSettings: 1

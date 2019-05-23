@@ -13,7 +13,7 @@ namespace ATD
             new KeyValuePair<string, KeyCode> ("moveX-", KeyCode.A),
             new KeyValuePair<string, KeyCode> ("FireWeapon", KeyCode.Mouse0),
             new KeyValuePair<string, KeyCode> ("UseSkill", KeyCode.Mouse1),
-            new KeyValuePair<string, KeyCode> ("look", KeyCode.None)
+            new KeyValuePair<string, KeyCode> ("look", KeyCode.None),
         };
     }
 }

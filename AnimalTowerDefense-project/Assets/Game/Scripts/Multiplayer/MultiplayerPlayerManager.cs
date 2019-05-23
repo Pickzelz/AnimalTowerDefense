@@ -1,26 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 
 namespace Multiplayer
 {
-    public class MultiplayerPlayerManager : MonoBehaviourPunCallbacks
+    public class MultiplayerPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         /// <summary>
         /// Start is called on the frame when a script is enabled just before
         /// any of the Update methods is called the first time.
         /// </summary>
+        /// 
+
+        Component[] controllers;
         void Start()
         {
-            Component[] controllers =  gameObject.GetComponents(typeof(IMultiplayerPlayerObject));
+            controllers =  gameObject.GetComponents(typeof(IMultiplayerPlayerObject));
             if(!photonView.IsMine && PhotonNetwork.IsConnected)
             {
                 foreach(IMultiplayerPlayerObject obj in controllers)
                 {
                     obj.WhenNotMine();
                 }
+            }
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            foreach (IMultiplayerPlayerObject obj in controllers)
+            {
+                obj.SyncVariable(stream, info);
             }
         }
     }

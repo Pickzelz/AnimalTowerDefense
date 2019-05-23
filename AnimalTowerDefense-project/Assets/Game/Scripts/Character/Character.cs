@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using Dictus;
 using Multiplayer;
-using UnityEngine.Animations;
+using Photon.Pun;
+using FISkill;
 
 namespace ATD
 {
-    public class Character : MonoBehaviour, IDamageable, IControllable, IMultiplayerPlayerObject
+    public class Character : MonoBehaviour, IDamageable, IControllable, IMultiplayerPlayerObject, IPunInstantiateMagicCallback
     {
         [SerializeField] private float moveSpeed_ = 2;
         //[SerializeField] private Weapon primaryWep_ = null;
@@ -19,6 +19,10 @@ namespace ATD
         private MeshRenderer mr_;
 
         public Animator Anim;
+        public CharacterSkills SkillClass;
+        
+
+        public static Character Me = null;
 
         private void Awake()
         {
@@ -30,6 +34,9 @@ namespace ATD
         private void Start()
         {
             RegisterToAdapter();
+            Anim.speed = moveSpeed_ / 2;
+            if (isLocalPlayer)
+                Me = this;
         }
 
         private void Update()
@@ -67,6 +74,7 @@ namespace ATD
             actionSet["moveX-"].SetKeyUpDelegatedAction(() => { SetHorizontalMovementValue(0); });
 
             actionSet["FireWeapon"].SetKeyDownDelegatedAction(() => { FireWeapon(); });
+            //actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
             actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
 
             actionSet["look"].SetContinuousDelegatedAction((Vector3 mousePos) => { Rotate(mousePos); });
@@ -85,7 +93,11 @@ namespace ATD
         public void TakeDamage(float damage)
         {
             health_ -= damage;
-            ShowTakingDamage();
+            if(health_ <= 0)
+            {
+                OnDeath();
+            }
+            //ShowTakingDamage();
         }
 
         private void ShowTakingDamage()
@@ -95,7 +107,7 @@ namespace ATD
 
         private void Rotate(Vector3 mousePos)
         {
-            if (!isLocalPlayer)
+            if (!isLocalPlayer || SkillClass.IsStillUseSkill())
                 return;
             Vector3 lookDir = Vector3.zero;
             RaycastHit hit;
@@ -116,24 +128,30 @@ namespace ATD
         {
             if (!isLocalPlayer)
                 return;
-            Anim.SetTrigger("IsAttacking");
+
+            SkillClass.UseSkill("attack");
+
+            SkillClass.IsCharacterCanHit("attack", Vector3.zero);
             //primaryWep_.SpawnHitboxes();
         }
 
         private void UseSkill()
         {
+            if (!isLocalPlayer)
+                return;
+            SkillClass.UseSkill("Slam");
             //secondaryWep_.SpawnHitboxes();
         }
 
         private void Move(Vector3 direction, float deltaTime)
         {
-            if (!isLocalPlayer)
+            if (!isLocalPlayer || !SkillClass.isCanMove)
                 return;
             transform.localPosition = transform.localPosition + (direction * moveSpeed_ * deltaTime);
             if (movementVector_ != Vector3.zero)
             {
                 Anim.SetFloat("MovementSpeed", moveSpeed_);
-                Anim.speed = moveSpeed_/2;
+                
             }
             else
             {
@@ -157,6 +175,39 @@ namespace ATD
         public void ChangeSpeed(float speedFactor)
         {
             moveSpeed_ += speedFactor;
+        }
+
+        public void SyncVariable(PhotonStream stream, PhotonMessageInfo info)
+        {
+
+        }
+
+        public float GetCurrentHealth()
+        {
+            return health_;
+        }
+
+        public void OnPhotonInstantiate(PhotonMessageInfo info)
+        {
+            LevelManager.Instance.Players.Add(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            OnDeath();
+        }
+
+        private void OnDeath()
+        {
+            PhotonView view = PhotonView.Get(this);
+            SkillClass.isCanMove = false;
+            //view.RPC("RPCOnDeath", RpcTarget.All);
+        }
+
+        [PunRPC]
+        private void RPCOnDeath()
+        {
+            //Destroy(gameObject);
         }
 
         public ActionSet actionSet { get { return actionSet_; } }
