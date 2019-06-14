@@ -9,10 +9,10 @@ namespace ATD
 {
     public class Character : MonoBehaviour, IDamageable, IControllable, IMultiplayerPlayerObject, IPunInstantiateMagicCallback
     {
-        [SerializeField] private float moveSpeed_ = 2;
+        //[SerializeField] private float moveSpeed_ = 2;
         //[SerializeField] private Weapon primaryWep_ = null;
         //[SerializeField] private Weapon secondaryWep_ = null;
-        [SerializeField] private float health_;
+        //[SerializeField] private float health_;
         private ActionSet actionSet_;
         private Vector3 movementVector_ = Vector3.zero;
         private bool isLocalPlayer = true;
@@ -20,7 +20,7 @@ namespace ATD
 
         public Animator Anim;
         public CharacterSkills SkillClass;
-        
+        public CharacterStatus Statuses;
 
         public static Character Me = null;
 
@@ -34,13 +34,14 @@ namespace ATD
         private void Start()
         {
             RegisterToAdapter();
-            Anim.speed = moveSpeed_ / 2;
+            Anim.speed = Statuses.Getvalue("Speed") / 2;
             if (isLocalPlayer)
                 Me = this;
         }
 
         private void Update()
         {
+
             if (!isLocalPlayer)
                 return;
             Move(movementVector_, Time.deltaTime);
@@ -92,8 +93,8 @@ namespace ATD
 
         public void TakeDamage(float damage)
         {
-            health_ -= damage;
-            if(health_ <= 0)
+            Statuses.ChangeStatus("Health", damage, CharacterStatus.EChangeStatusType.DOWN);
+            if(Statuses.Getvalue("Health") <= Statuses.GetStatus("Health").min)
             {
                 OnDeath();
             }
@@ -119,10 +120,9 @@ namespace ATD
                     lookDir = hit.point;
                     lookDir.y = transform.localPosition.y;
                     transform.LookAt(lookDir, Vector3.up);
-                    }
+                }
             }
         }
-            
 
         private void FireWeapon()
         {
@@ -131,7 +131,6 @@ namespace ATD
 
             SkillClass.UseSkill("attack");
 
-            SkillClass.IsCharacterCanHit("attack", Vector3.zero);
             //primaryWep_.SpawnHitboxes();
         }
 
@@ -139,7 +138,8 @@ namespace ATD
         {
             if (!isLocalPlayer)
                 return;
-            SkillClass.UseSkill("Slam");
+            
+            SkillClass.UseSkill("PoisonAttack", Input.mousePosition);
             //secondaryWep_.SpawnHitboxes();
         }
 
@@ -147,10 +147,10 @@ namespace ATD
         {
             if (!isLocalPlayer || !SkillClass.isCanMove)
                 return;
-            transform.localPosition = transform.localPosition + (direction * moveSpeed_ * deltaTime);
+            transform.localPosition = transform.localPosition + (direction * Statuses.Getvalue("Speed") * deltaTime);
             if (movementVector_ != Vector3.zero)
             {
-                Anim.SetFloat("MovementSpeed", moveSpeed_);
+                Anim.SetFloat("MovementSpeed", Statuses.Getvalue("Speed"));
                 
             }
             else
@@ -174,7 +174,7 @@ namespace ATD
 
         public void ChangeSpeed(float speedFactor)
         {
-            moveSpeed_ += speedFactor;
+            Statuses.ChangeStatus("Speed", speedFactor, CharacterStatus.EChangeStatusType.DOWN);
         }
 
         public void SyncVariable(PhotonStream stream, PhotonMessageInfo info)
@@ -184,7 +184,7 @@ namespace ATD
 
         public float GetCurrentHealth()
         {
-            return health_;
+            return Statuses.Getvalue("Health");
         }
 
         public void OnPhotonInstantiate(PhotonMessageInfo info)
@@ -211,6 +211,6 @@ namespace ATD
         }
 
         public ActionSet actionSet { get { return actionSet_; } }
-        public float health { get { return health_; } }
+        public float health { get { return Statuses.Getvalue("Health"); } }
     }
 }

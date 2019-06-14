@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FISkill;
 namespace ATD
 {
     public class Gun : Weapon
@@ -18,9 +19,9 @@ namespace ATD
 
             GameObject spawnedBullet = Instantiate(bullet.gameObject, bulletPlaceholder.transform);
             Bullet _bullet = spawnedBullet.GetComponent<Bullet>();
-            _bullet.Damage = damage;
+            //_bullet.Effects = Effe;
             _bullet.Range = Range;
-            _bullet.CanAttack = canAttack;
+            _bullet.TargetTags = canAttack;
         }
 
         public float Damage

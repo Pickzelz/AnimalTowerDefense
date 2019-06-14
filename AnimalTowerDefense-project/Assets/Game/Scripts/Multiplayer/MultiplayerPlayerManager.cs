@@ -14,7 +14,7 @@ namespace Multiplayer
         Component[] controllers;
         void Start()
         {
-            controllers =  gameObject.GetComponents(typeof(IMultiplayerPlayerObject));
+            controllers = gameObject.GetComponents(typeof(IMultiplayerPlayerObject));
             if(!photonView.IsMine && PhotonNetwork.IsConnected)
             {
                 foreach(IMultiplayerPlayerObject obj in controllers)
@@ -26,10 +26,10 @@ namespace Multiplayer
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            foreach (IMultiplayerPlayerObject obj in controllers)
-            {
-                obj.SyncVariable(stream, info);
-            }
+            //foreach (IMultiplayerPlayerObject obj in controllers)
+            //{
+            //    obj.SyncVariable(stream, info);
+            //}
         }
     }
 

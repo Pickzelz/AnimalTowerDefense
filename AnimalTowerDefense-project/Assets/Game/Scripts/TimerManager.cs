@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using ATD;
@@ -21,7 +21,8 @@ public class TimerManager : Singleton<TimerManager>
 
         public void CallCallback()
         {
-            _callback(Name);
+            if(_callback != null)
+                _callback(Name);
         }
     }
 
@@ -54,20 +55,17 @@ public class TimerManager : Singleton<TimerManager>
         }
     }
 
-    public Timer? AddTimer(string Name, float timer, Timer.TimerCallback callback)
+    public string AddTimer(string Name, float timer, Timer.TimerCallback callback)
     {
-        if(!Timers.Exists(x => x.Name == Name))
-        {
-            Timer t_timer = new Timer(Name, callback);
-            t_timer.timer = timer;
-            Timers.Add(t_timer);
-            return t_timer;
+        string TName = Name;
+        if (Timers.Exists(x => x.Name == Name))
+        { 
+            TName = TName + Guid.NewGuid();
         }
-        else
-        {
-            Debug.LogError("Timer is already exist");
-        }
-        return null;
+        Timer t_timer = new Timer(TName, callback);
+        t_timer.timer = timer;
+        Timers.Add(t_timer);
+        return TName;
     }
 
     public void RemoveTimer(string name)

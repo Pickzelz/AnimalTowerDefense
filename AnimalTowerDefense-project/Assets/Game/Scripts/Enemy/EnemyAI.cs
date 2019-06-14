@@ -14,6 +14,7 @@ namespace ATD
         [SerializeField] private Animator anim;
         [SerializeField] private CharacterSkills skills;
         [SerializeField] private float Health;
+        [SerializeField] private CharacterStatus Statuses;
 
         [SerializeField] private MultiplayerPlayerManager MPPlayer;
 
@@ -24,7 +25,7 @@ namespace ATD
         {
             if (!isLocalPlayer)
                 return;
-            agent.stoppingDistance = skills.FindSkill("Attack").Range;
+            agent.stoppingDistance = 5;
             skills.RegisterCallbackOnASkillUsed(OnSkillUsed);
 
         }
@@ -38,9 +39,13 @@ namespace ATD
             if (Character.Me != null)
             {
                 agent.SetDestination(Character.Me.transform.position);
-                if (Vector3.Distance(transform.position, Character.Me.transform.position) <= skills.FindSkill("Attack").Range)
+                if (Vector3.Distance(transform.position, Character.Me.transform.position) <= 5)
                 {
-                    skills.UseSkill("Attack");
+                    skills.UseEquipment("Guns").UseEquipment("Attack");
+                }
+                else
+                {
+                    skills.UseEquipment("Guns").FinishUseEquipment("Attack");
                 }
             }
             if (agent.remainingDistance != Mathf.Infinity && agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance) 
@@ -51,6 +56,11 @@ namespace ATD
             {
                 anim.SetFloat("Speed", 1);
             }
+            if(Statuses.GetStatus("Health").value <= 0)
+            {
+                PhotonView view = PhotonView.Get(this);
+                view.RPC("OnDeath", RpcTarget.All);
+            }
         }
 
         public void OnSkillUsed(string skillName)
@@ -60,7 +70,7 @@ namespace ATD
 
         public void TakeDamage(float damage)
         {
-            Health -= damage;
+            Statuses.ChangeStatus("Damage", damage, CharacterStatus.EChangeStatusType.DOWN);
             if(Health <= 0)
             {
                 PhotonView view = PhotonView.Get(this);
@@ -76,7 +86,7 @@ namespace ATD
 
         public float GetCurrentHealth()
         {
-            return Health;
+            return Statuses.Getvalue("Health");
         }
 
         public void WhenNotMine()
@@ -86,14 +96,14 @@ namespace ATD
 
         public void SyncVariable(PhotonStream stream, PhotonMessageInfo info)
         {
-            if(stream.IsWriting)
-            {
-                stream.SendNext(Health);
-            }
-            else
-            {
-                this.Health = (float)stream.ReceiveNext();
-            }
+            //if(stream.IsWriting)
+            //{
+            //    stream.SendNext(Health);
+            //}
+            //else
+            //{
+            //    Statuses.ChangeStatus("Health", (float)stream.ReceiveNext(), CharacterStatus.EChangeStatusType.CHANGE);
+            //}
         }
     }
 }

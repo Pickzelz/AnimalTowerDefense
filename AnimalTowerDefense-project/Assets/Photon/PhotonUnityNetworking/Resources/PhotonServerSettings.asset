@@ -39,5 +39,11 @@ MonoBehaviour:
   - UseItem
   - OnDeath
   - RPCOnDeath
+  - RPCChangeStatus
+  - RPCUseSkill
+  - RPCSetActive
+  - RPCReady
+  - UseSkill
+  - RPCOnFinishContinousSkill
   DisableAutoOpenWizard: 1
   ShowSettings: 1

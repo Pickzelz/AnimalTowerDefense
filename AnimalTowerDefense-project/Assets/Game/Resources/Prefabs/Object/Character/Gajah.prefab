@@ -256,6 +256,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &969792586751347868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 703363875128269534}
+  m_Layer: 9
+  m_Name: MagicPlaceholder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &703363875128269534
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969792586751347868}
+  m_LocalRotation: {x: 0.012755133, y: -0, z: -0, w: 0.99991864}
+  m_LocalPosition: {x: -1.0951769, y: 0.726, z: 0.052}
+  m_LocalScale: {x: 0.6653812, y: 0.5646535, z: 0.9997177}
+  m_Children: []
+  m_Father: {fileID: 6047552109329077659}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1252162194739259343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,7 +1129,6 @@ GameObject:
   - component: {fileID: 1289029053924797542}
   - component: {fileID: 2364868924554550603}
   - component: {fileID: 7549227639812875525}
-  - component: {fileID: 3179013936781063591}
   - component: {fileID: 6638492735244291124}
   - component: {fileID: 3278293900620491307}
   - component: {fileID: 3343485395335824724}
@@ -1107,8 +1136,11 @@ GameObject:
   - component: {fileID: 8918849512768685569}
   - component: {fileID: 8839690658358031272}
   - component: {fileID: 5700682606832719670}
+  - component: {fileID: 3179013936781063591}
   - component: {fileID: 5200996357213755575}
+  - component: {fileID: 8809371620473557441}
   - component: {fileID: -292681386479457120}
+  - component: {fileID: 4690898581151066630}
   m_Layer: 9
   m_Name: Gajah
   m_TagString: Player
@@ -1163,22 +1195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a0bb204469e86498b7550968b9f783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3179013936781063591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5152628773892856243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3980da814d789954fa5b845017194a35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed_: 5
-  health_: 100
-  Anim: {fileID: 2364868924554550603}
-  SkillClass: {fileID: 5200996357213755575}
 --- !u!114 &6638492735244291124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1199,6 +1215,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 3278293900620491307}
   - {fileID: 3343485395335824724}
+  - {fileID: 8809371620473557441}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1229,8 +1246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 0
-  ShowParameterInspector: 0
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 1
     SynchronizeType: 1
@@ -1308,6 +1325,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weapons: []
+--- !u!114 &3179013936781063591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5152628773892856243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3980da814d789954fa5b845017194a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Anim: {fileID: 2364868924554550603}
+  SkillClass: {fileID: 5200996357213755575}
+  Statuses: {fileID: 8809371620473557441}
 --- !u!114 &5200996357213755575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,35 +1357,129 @@ MonoBehaviour:
   weaponCharacter: {fileID: 5700682606832719670}
   TagsCanAttacked:
   - Enemy
+  Status: {fileID: 0}
   Skills:
   - IsCharacterMove: 0
     Name: attack
     Range: 0
+    isContinousSkill: 0
+    TagsCanBeAttacked:
+    - Enemy
+    Type: 0
     AnimationName: Attack
     AnimationIndex: 1
     SkillTime: 0.3
     isCharacterCanMove: 1
-    Damage: 10
+    SkillCooldown: 0
+    Equipments:
+      List: []
     DealDamageOnTime: 0
+    Effects:
+    - statusName: Health
+      effect: 100
+      effectType: 1
+      isEffectCanRecover: 0
+      isEffectPerSecond: 0
+      EffectPerSecond: 0
+      EffectPerSecondTime: 0
+      time: 0
+    IsUseDamageHolder: 0
+    DamageHolder: {fileID: 0}
+    DamageHolderPlaceholder: {fileID: 0}
     IsAOE: 1
-    AOERange: 5
+    AOERange: 3
     AOEAngle: 20
     AOEDirection: 0
     colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
+    CharacterPhotonView: {fileID: 0}
   - IsCharacterMove: 0
     Name: Slam
     Range: 10
+    isContinousSkill: 0
+    TagsCanBeAttacked:
+    - Enemy
+    Type: 0
     AnimationName: 
     AnimationIndex: 2
     SkillTime: 1.2
     isCharacterCanMove: 1
-    Damage: 100
-    DealDamageOnTime: 1
+    SkillCooldown: 0
+    Equipments:
+      List: []
+    DealDamageOnTime: 1.19
+    Effects:
+    - statusName: Health
+      effect: 1000
+      effectType: 1
+      isEffectCanRecover: 0
+      isEffectPerSecond: 0
+      EffectPerSecond: 0
+      EffectPerSecondTime: 0
+      time: 0
+    IsUseDamageHolder: 0
+    DamageHolder: {fileID: 0}
+    DamageHolderPlaceholder: {fileID: 0}
+    IsAOE: 1
+    AOERange: 5
+    AOEAngle: 360
+    AOEDirection: 0
+    colorAttackArea: {r: 0.14122581, g: 0, b: 1, a: 1}
+    CharacterPhotonView: {fileID: 0}
+  - IsCharacterMove: 0
+    Name: PoisonAttack
+    Range: 10
+    isContinousSkill: 0
+    TagsCanBeAttacked:
+    - Enemy
+    Type: 0
+    AnimationName: 
+    AnimationIndex: 1
+    SkillTime: 0.3
+    isCharacterCanMove: 1
+    SkillCooldown: 0
+    Equipments:
+      List: []
+    DealDamageOnTime: 0
+    Effects:
+    - statusName: Health
+      effect: 100
+      effectType: 1
+      isEffectCanRecover: 0
+      isEffectPerSecond: 1
+      EffectPerSecond: 40
+      EffectPerSecondTime: 1
+      time: 10
+    IsUseDamageHolder: 1
+    DamageHolder: {fileID: -4130662206223874794, guid: 9a232f3f2ca96bd4bb073f0d69591d08,
+      type: 3}
+    DamageHolderPlaceholder: {fileID: 969792586751347868}
     IsAOE: 0
     AOERange: 0
     AOEAngle: 180
     AOEDirection: 0
     colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
+    CharacterPhotonView: {fileID: 0}
+--- !u!114 &8809371620473557441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5152628773892856243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd5646ccc1fe4749a0cee86e2e43795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StatusArray:
+  - key: Health
+    value: 1000
+    max: 1000
+    min: 0
+  - key: Speed
+    value: 5
+    max: 100
+    min: 0
 --- !u!114 &-292681386479457120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,6 +1493,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealthSlider: {fileID: 6589820932530219133}
+--- !u!114 &4690898581151066630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5152628773892856243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d9895241349fd045b45a35ff8f49256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStatusClass: {fileID: 8809371620473557441}
 --- !u!1 &5156510708324603151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,6 +1792,7 @@ Transform:
   - {fileID: 4262293854109079333}
   - {fileID: 7448060349979598962}
   - {fileID: 8676821057896202759}
+  - {fileID: 703363875128269534}
   m_Father: {fileID: 4239343144194370759}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

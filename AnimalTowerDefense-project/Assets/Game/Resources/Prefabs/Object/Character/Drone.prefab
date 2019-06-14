@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 8590461326088739233}
   - component: {fileID: 6939438999042103873}
   - component: {fileID: 8216300241328913273}
-  - component: {fileID: 96097098839568114}
+  - component: {fileID: 3975754363755467718}
+  - component: {fileID: 4947787326662848433}
   m_Layer: 10
   m_Name: Gun
   m_TagString: Untagged
@@ -79,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &96097098839568114
+--- !u!114 &3975754363755467718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,17 +89,71 @@ MonoBehaviour:
   m_GameObject: {fileID: 632720040169135983}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 840229d3197dd8a4fae9d5a55d100247, type: 3}
+  m_Script: {fileID: 11500000, guid: 450075382f623d74585cd52be24902ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsWeaponActived: 0
-  EffectGunBlow: {fileID: 3419152586781225528}
-  damage: 10
-  Range: 100
-  bulletPlaceholder: {fileID: 2362741701704626050}
-  bullet: {fileID: 8461625971099787613, guid: 68b956defcc58f9488bd24d253b34bef, type: 3}
-  canAttack:
-  - Player
+  Anim: {fileID: 6599148649382839689}
+  isCanMove: 0
+  weaponCharacter: {fileID: 0}
+  TagsCanAttacked: []
+  Status: {fileID: 0}
+  Skills:
+  - IsCharacterMove: 0
+    Name: Attack
+    Range: 10
+    isContinousSkill: 1
+    TagsCanBeAttacked:
+    - Player
+    Type: 0
+    AnimationName: 
+    AnimationIndex: 0
+    SkillTime: 0.4
+    isCharacterCanMove: 1
+    SkillCooldown: 0
+    Equipments:
+      List: []
+    DealDamageOnTime: 0
+    Effects:
+    - statusName: Health
+      effect: 10
+      effectType: 1
+      isEffectCanRecover: 0
+      isEffectPerSecond: 0
+      EffectPerSecond: 0
+      EffectPerSecondTime: 0
+      time: 0
+    IsUseDamageHolder: 1
+    DamageHolder: {fileID: 8461625971099787613, guid: 68b956defcc58f9488bd24d253b34bef,
+      type: 3}
+    DamageHolderPlaceholder: {fileID: 2362741701704626050}
+    IsAOE: 0
+    AOERange: 10
+    AOEAngle: 10
+    AOEDirection: 0
+    colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
+    CharacterPhotonView: {fileID: 0}
+--- !u!114 &4947787326662848433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632720040169135983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1381074089527706256
 GameObject:
   m_ObjectHideFlags: 0
@@ -5200,6 +5255,8 @@ GameObject:
   - component: {fileID: 1381608412551695506}
   - component: {fileID: 3302604126155789352}
   - component: {fileID: 164796551852326023}
+  - component: {fileID: 7861654988134243116}
+  - component: {fileID: 9168074070631597983}
   m_Layer: 10
   m_Name: Drone
   m_TagString: Enemy
@@ -5295,21 +5352,35 @@ MonoBehaviour:
   isCanMove: 0
   weaponCharacter: {fileID: 914244597530114322}
   TagsCanAttacked: []
+  Status: {fileID: 0}
   Skills:
   - IsCharacterMove: 0
-    Name: Attack
-    Range: 10
-    AnimationName: asd
-    AnimationIndex: 1
-    SkillTime: 0.2
+    Name: Guns
+    Range: 0
+    isContinousSkill: 0
+    TagsCanBeAttacked:
+    - Player
+    Type: 1
+    AnimationName: 
+    AnimationIndex: 0
+    SkillTime: 0
     isCharacterCanMove: 1
-    Damage: 1
+    SkillCooldown: 0
+    Equipments:
+      List:
+      - {fileID: 3975754363755467718}
+      - {fileID: 2727110553668086348}
     DealDamageOnTime: 0
+    Effects: []
+    IsUseDamageHolder: 0
+    DamageHolder: {fileID: 0}
+    DamageHolderPlaceholder: {fileID: 0}
     IsAOE: 0
     AOERange: 0
-    AOEAngle: 0
+    AOEAngle: 180
     AOEDirection: 0
-    colorAttackArea: {r: 1, g: 0.4009434, b: 0.4009434, a: 0}
+    colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
+    CharacterPhotonView: {fileID: 0}
 --- !u!114 &5376849613528265282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5327,6 +5398,7 @@ MonoBehaviour:
   anim: {fileID: 6599148649382839689}
   skills: {fileID: 5721408944625455190}
   Health: 100
+  Statuses: {fileID: 9168074070631597983}
   MPPlayer: {fileID: 7613297503788743323}
 --- !u!114 &914244597530114322
 MonoBehaviour:
@@ -5341,8 +5413,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weapons:
-  - {fileID: 96097098839568114}
-  - {fileID: 7826986328096373936}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!54 &7367470245554270148
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5405,6 +5477,7 @@ MonoBehaviour:
   - {fileID: 3302604126155789352}
   - {fileID: 164796551852326023}
   - {fileID: 7613297503788743323}
+  - {fileID: 9168074070631597983}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -5444,6 +5517,40 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+--- !u!114 &7861654988134243116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999314791798249387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d9895241349fd045b45a35ff8f49256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStatusClass: {fileID: 9168074070631597983}
+--- !u!114 &9168074070631597983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999314791798249387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd5646ccc1fe4749a0cee86e2e43795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StatusArray:
+  - key: Health
+    value: 1000
+    max: 1000
+    min: 0
+  - key: Speed
+    value: 5
+    max: 100
+    min: 0
 --- !u!1 &5563927773650813308
 GameObject:
   m_ObjectHideFlags: 0
@@ -5671,7 +5778,8 @@ GameObject:
   - component: {fileID: 5778052042734531051}
   - component: {fileID: 2505869234000683183}
   - component: {fileID: 336859930284624645}
-  - component: {fileID: 7826986328096373936}
+  - component: {fileID: 2727110553668086348}
+  - component: {fileID: 4292795803430107865}
   m_Layer: 10
   m_Name: Gun (1)
   m_TagString: Untagged
@@ -5739,7 +5847,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7826986328096373936
+--- !u!114 &2727110553668086348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5748,16 +5856,70 @@ MonoBehaviour:
   m_GameObject: {fileID: 6006587266716012549}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 840229d3197dd8a4fae9d5a55d100247, type: 3}
+  m_Script: {fileID: 11500000, guid: 450075382f623d74585cd52be24902ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsWeaponActived: 0
-  EffectGunBlow: {fileID: 2809687451895322686}
-  damage: 10
-  Range: 100
-  bulletPlaceholder: {fileID: 5951073478699939910}
-  bullet: {fileID: 8461625971099787613, guid: 68b956defcc58f9488bd24d253b34bef, type: 3}
-  canAttack: []
+  Anim: {fileID: 6599148649382839689}
+  isCanMove: 0
+  weaponCharacter: {fileID: 0}
+  TagsCanAttacked: []
+  Status: {fileID: 0}
+  Skills:
+  - IsCharacterMove: 0
+    Name: Attack
+    Range: 10
+    isContinousSkill: 1
+    TagsCanBeAttacked: []
+    Type: 0
+    AnimationName: 
+    AnimationIndex: 0
+    SkillTime: 0.4
+    isCharacterCanMove: 1
+    SkillCooldown: 0
+    Equipments:
+      List: []
+    DealDamageOnTime: 0
+    Effects:
+    - statusName: Health
+      effect: 10
+      effectType: 1
+      isEffectCanRecover: 0
+      isEffectPerSecond: 0
+      EffectPerSecond: 0
+      EffectPerSecondTime: 0
+      time: 0
+    IsUseDamageHolder: 1
+    DamageHolder: {fileID: 8461625971099787613, guid: 68b956defcc58f9488bd24d253b34bef,
+      type: 3}
+    DamageHolderPlaceholder: {fileID: 5951073478699939910}
+    IsAOE: 0
+    AOERange: 0
+    AOEAngle: 180
+    AOEDirection: 0
+    colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
+    CharacterPhotonView: {fileID: 0}
+--- !u!114 &4292795803430107865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6006587266716012549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6163080986642591722
 GameObject:
   m_ObjectHideFlags: 0
