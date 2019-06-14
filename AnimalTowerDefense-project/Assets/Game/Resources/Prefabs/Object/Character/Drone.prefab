@@ -109,7 +109,7 @@ MonoBehaviour:
     AnimationIndex: 0
     SkillTime: 0.4
     isCharacterCanMove: 1
-    SkillCooldown: 0
+    SkillCooldown: 0.5
     Equipments:
       List: []
     DealDamageOnTime: 0

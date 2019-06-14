@@ -75,6 +75,7 @@ namespace ATD
             actionSet["moveX-"].SetKeyUpDelegatedAction(() => { SetHorizontalMovementValue(0); });
 
             actionSet["FireWeapon"].SetKeyDownDelegatedAction(() => { FireWeapon(); });
+            actionSet["FireWeapon"].SetKeyUpDelegatedAction(() => { UnFireWeapon(); });
             //actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
             actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
 
@@ -108,7 +109,7 @@ namespace ATD
 
         private void Rotate(Vector3 mousePos)
         {
-            if (!isLocalPlayer || SkillClass.IsStillUseSkill())
+            if (!isLocalPlayer)
                 return;
             Vector3 lookDir = Vector3.zero;
             RaycastHit hit;
@@ -130,6 +131,14 @@ namespace ATD
                 return;
 
             SkillClass.UseSkill("attack");
+
+            //primaryWep_.SpawnHitboxes();
+        }
+        private void UnFireWeapon()
+        {
+            if (!isLocalPlayer)
+                return;
+            SkillClass.OnFinishContinousSkill("attack");
 
             //primaryWep_.SpawnHitboxes();
         }

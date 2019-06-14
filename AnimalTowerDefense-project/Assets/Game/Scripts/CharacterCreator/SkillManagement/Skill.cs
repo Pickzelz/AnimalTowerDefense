@@ -10,17 +10,19 @@ namespace FISkill
     public class Skill
     {
         public enum E_SkillType { SKILL, EQUIPMENT, COUNT }
-        public delegate void Del_OnTimer(string timerName);
+        public delegate void Del_OnTimer(string timerName, Skill skill);
+        public delegate void Del_OnSkill(Skill skill);
 
         private Del_OnTimer _onTimerFinishCallback;
         private Del_OnTimer _onTimerDealDamageCallback;
+        private Del_OnSkill _onSkillUsedCallback;
 
-        public enum state { IDLE,WAITING_NEXT_SKILL, SKILL_PREPARING, SKILL_LAUNCED, SKILL_FINISH, GIVING_DAMAGE, FINISHING_CONTINOUS_SKILL }
+        public enum state { IDLE,WAITING_NEXT_SKILL, SKILL_PREPARING, SKILL_LAUNCED, SKILL_FINISH, GIVING_DAMAGE, FINISHING_CONTINOUS_SKILL, WAITING_COOLDOWN }
         [HideInInspector] public bool IsCharacterMove = false;
 
         public string Name = "";
         public float Range = 0f;
-        public bool isContinousSkill;
+        public bool isContinousSkill = false;
         public List<string> TagsCanBeAttacked;
         public E_SkillType Type;
 
@@ -31,7 +33,7 @@ namespace FISkill
         [Header("Skill Options")]
         public float SkillTime = 0f;
         public bool isCharacterCanMove = true;
-        public float SkillCooldown;
+        public float SkillCooldown = 0f;
 
         [Header("Character Weapon")]
         public Equipments Equipments = null;
@@ -67,6 +69,8 @@ namespace FISkill
         private state _currentState;
         private string _onFInishTimerName;
         private string _onDealDamageTimerName;
+        private float? _time;
+        private bool _isContionusSkillIsActive = false;
 
         #endregion
         #region Public Function
@@ -81,15 +85,72 @@ namespace FISkill
             SetState(state.IDLE);
         }
 
+        public void Update()
+        {
+            Wait();
+            switch (GetState())
+            {
+                case state.IDLE:
+                    break;
+                case state.SKILL_PREPARING:
+                    _onSkillUsedCallback(this);
+                    break;
+                case state.SKILL_LAUNCED:
+                    break;
+                case state.GIVING_DAMAGE:
+                    break;
+                case state.SKILL_FINISH:
+
+                    if (_isContionusSkillIsActive)
+                    {
+                        SetState(state.WAITING_NEXT_SKILL);
+                    }
+                    else
+                    {
+                        SetState(state.WAITING_COOLDOWN);
+                        CleanSkill();
+                    }
+                    //weaponCharacter.UseWeapon(false);
+
+                    break;
+                case state.WAITING_NEXT_SKILL:
+                    if (_time <= 0)
+                    {
+                        SetState(state.SKILL_PREPARING);
+                        //CurrentSkillUsed = null;
+                        _time = null;
+                    }
+                    break;
+
+                case state.WAITING_COOLDOWN:
+                    if (_time <= 0)
+                    {
+                        SetState(state.IDLE);
+                        _time = null;
+                    }
+                    break;
+                case state.FINISHING_CONTINOUS_SKILL:
+                    SetState(state.IDLE, true);
+                    CleanSkill();
+                    break;
+            }
+            
+        }
+
         public state GetState()
         {
             return _currentState;
         }
 
-        public void SetState(state State)
+        public void SetState(state State, bool force = false)
         {
-            Debug.Log("Change State from " + _currentState + " to " + State);
+            //Debug.Log("Change State from " + _currentState + " to " + State);
             _currentState = State;
+        }
+
+        public void StopContinousSkill()
+        {
+            _isContionusSkillIsActive = false;
         }
 
         public void RegisterCallback(Del_OnTimer onFinishSkill, Del_OnTimer onDealDamageSkill)
@@ -97,10 +158,18 @@ namespace FISkill
             _onTimerFinishCallback = onFinishSkill;
             _onTimerDealDamageCallback = onDealDamageSkill;
         }
+        public void RegisterOnSkillCallback(Del_OnSkill _onSkill)
+        {
+            _onSkillUsedCallback = _onSkill;
+        }
         public void DestroyCallback()
         {
             _onTimerFinishCallback = null;
             _onTimerDealDamageCallback = null ;
+        }
+        public bool IsSkillCanBeUsed()
+        {
+            return GetState() == state.IDLE;
         }
 
         private void CalculateSkill()
@@ -130,8 +199,10 @@ namespace FISkill
         public void SkillUsed()
         {
             SetState(state.SKILL_LAUNCED);
+            Wait(SkillCooldown);
             CreateTimer();
-            if(IsUseDamageHolder)
+            
+            if (IsUseDamageHolder)
             {
                 SpawnBullet(Target);
             }
@@ -140,6 +211,7 @@ namespace FISkill
         public void UseSkill(Vector3? target)
         {
             Target = target;
+            _isContionusSkillIsActive = isContinousSkill;
             SetState(state.SKILL_PREPARING);
         }
 
@@ -178,14 +250,30 @@ namespace FISkill
 
         private void OnTimerFinish(string timerName)
         {
-            if(_onTimerFinishCallback != null)
-                _onTimerFinishCallback(timerName);
+            SetState(state.SKILL_FINISH);
+            if (_onTimerFinishCallback != null)
+                _onTimerFinishCallback(timerName, this);
+
         }
 
         private void OnDealDamageCallback(string timerName)
         {
-            if(_onTimerDealDamageCallback != null)
-                _onTimerDealDamageCallback(timerName);
+            SetState(state.GIVING_DAMAGE);
+            if (_onTimerDealDamageCallback != null)
+                _onTimerDealDamageCallback(timerName, this);
+        }
+
+        private void Wait(float? second = null)
+        {
+            if (_time == null)
+            {
+                _time = second;
+            }
+            else
+            {
+                if (_time > 0)
+                    _time -= Time.deltaTime;
+            }
         }
         #endregion
 

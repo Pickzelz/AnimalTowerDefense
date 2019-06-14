@@ -10,6 +10,7 @@ namespace FISkill
     public class CharacterSkills : MonoBehaviour
     {
         public delegate void DelOnSkillUsed(string SkillName);
+        private UnityEvent _skillUpdate;
 
         public Animator Anim;
         [HideInInspector] public bool isCanMove;
@@ -21,7 +22,7 @@ namespace FISkill
         
         [SerializeField] private List<Skill> Skills;
         private float _time;
-        private Skill CurrentSkillUsed;
+        //private Skill CurrentSkillUsed;
         private List<string> ListSkillTimers;
 
         private bool isCapacityIsNotEmpty;
@@ -32,6 +33,7 @@ namespace FISkill
         {
             timer = null;
             isCapacityIsNotEmpty = true;
+            _skillUpdate = new UnityEvent();
         }
 
         private void Start()
@@ -45,64 +47,23 @@ namespace FISkill
             {
                 skill.Init();
                 skill.RegisterCallback(OnTimerFinish, OnDealDamage);
+                skill.RegisterOnSkillCallback(OnSkillUsed);
                 skill.CharacterPhotonView = _pView;
-
+                _skillUpdate.AddListener(skill.Update);
             }
         }
 
         private void FixedUpdate()
         {
-            if (CurrentSkillUsed != null)
-            {
-                if (CurrentSkillUsed.IsCharacterMove)
-                {
-                    Vector3 destination = transform.position + (transform.forward * CurrentSkillUsed.Range);
-                    transform.position = Vector3.Lerp(transform.position, destination, 0.5f);
-                }
-                switch(CurrentSkillUsed.GetState())
-                {
-                    case Skill.state.IDLE:
-                        break;
-                    case Skill.state.SKILL_PREPARING:
-                        OnSkillUsed(CurrentSkillUsed);
-                        break;
-                    case Skill.state.SKILL_LAUNCED:
-                        Wait(CurrentSkillUsed.SkillCooldown);
-                        break;
-                    case Skill.state.GIVING_DAMAGE:
-                        break;
-                    case Skill.state.SKILL_FINISH:
-                        Anim.SetInteger("Skill", 0);
-                        if (!CurrentSkillUsed.isContinousSkill)
-                        {
-                            isCanMove = true;
-                            CurrentSkillUsed.SetState(Skill.state.IDLE);
-                            CurrentSkillUsed.CleanSkill();
-                            CurrentSkillUsed = null;
-                        }
-                        else
-                        {
-                            CurrentSkillUsed.SetState(Skill.state.WAITING_NEXT_SKILL);
-                        }
-                        //weaponCharacter.UseWeapon(false);
-
-                        break;
-                    case Skill.state.WAITING_NEXT_SKILL:
-                        
-                        if(timer <= 0)
-                        {
-                            CurrentSkillUsed.SetState(Skill.state.SKILL_PREPARING);
-                            timer = null;
-                        }
-                        break;
-                    case Skill.state.FINISHING_CONTINOUS_SKILL:
-                        isCanMove = true;
-                        CurrentSkillUsed.SetState(Skill.state.IDLE);
-                        CurrentSkillUsed.CleanSkill();
-                        CurrentSkillUsed = null;
-                        break;
-                }
-            }
+            _skillUpdate.Invoke();
+            //if (CurrentSkillUsed != null)
+            //{
+            //    if (CurrentSkillUsed.IsCharacterMove)
+            //    {
+            //        Vector3 destination = transform.position + (transform.forward * CurrentSkillUsed.Range);
+            //        transform.position = Vector3.Lerp(transform.position, destination, 0.5f);
+            //    }
+            //}
         }
 
         private void OnDestroy()
@@ -117,7 +78,7 @@ namespace FISkill
             {
                 skill.DestroyCallback();
             }
-
+            _skillUpdate.RemoveAllListeners();
         }
 
         #region Public Function
@@ -126,33 +87,53 @@ namespace FISkill
             D_onSkillUsed = skillFunc;
         }
 
-        public void UseSkill(string SkillName, Vector3 target)
+        public void UseSkill(string SkillName, Vector3 target, bool force = false)
         {
-            if (!isCharacterCanUseSkill)
+            if (!_pView.IsMine)
                 return;
+            //if (!isCharacterCanUseSkill)
+            //    return;
             Skill skill = FindSkill(SkillName);
             if (skill == null)
                 return;
-            Ray ray = Camera.main.ScreenPointToRay(target);
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(ray);
-            foreach (RaycastHit hit in hits)
+            if(skill.IsSkillCanBeUsed())
             {
-                if (hit.transform.tag == "Land")
+                Ray ray = Camera.main.ScreenPointToRay(target);
+                RaycastHit[] hits;
+                hits = Physics.RaycastAll(ray);
+                foreach (RaycastHit hit in hits)
                 {
-                    _pView.RPC("RPCUseSkill", RpcTarget.All, SkillName, hit.point);
-                    break;
+                    if (hit.transform.tag == "Land")
+                    {
+                        if (force)
+                        {
+                            RPCUseSkill(SkillName, hit.point);
+                        }
+                        else
+                        {
+                            _pView.RPC("RPCUseSkill", RpcTarget.All, SkillName, hit.point);
+                        }
+                        break;
+                    }
                 }
             }
+            
         }
 
-        public void UseSkill(string SkillName)
+        public void UseSkill(string SkillName, bool force = false)
         {
+            if (!_pView.IsMine)
+                return;
             Skill skill = FindSkill(SkillName);
             if (skill == null)
                 return;
-            if(skill.GetState() == Skill.state.IDLE)
-                _pView.RPC("RPCUseSkill", RpcTarget.All, SkillName, null);
+            if (skill.IsSkillCanBeUsed())
+            {
+                if (force)
+                    RPCUseSkill(SkillName);
+                else
+                    _pView.RPC("RPCUseSkill", RpcTarget.All, SkillName, null);
+            }
         }
 
         public void OnFinishContinousSkill(string SkillName)
@@ -160,24 +141,25 @@ namespace FISkill
             Skill skill = FindSkill(SkillName);
             if (skill == null)
                 return;
-            if (skill.GetState() != Skill.state.IDLE && skill.Name == CurrentSkillUsed.Name)
+            if (skill.GetState() != Skill.state.IDLE)
                 _pView.RPC("RPCOnFinishContinousSkill", RpcTarget.All, SkillName);
         }
 
         [PunRPC]
         public void RPCOnFinishContinousSkill(string SkillName)
         {
-            CurrentSkillUsed.SetState(Skill.state.FINISHING_CONTINOUS_SKILL);
+            Skill skill = FindSkill(SkillName);
+            if (skill == null)
+                return;
+            skill.StopContinousSkill();
         }
 
         [PunRPC]
         public void RPCUseSkill(string skillName, Vector3? target = null)
         {
             Skill skill = FindSkill(skillName);
-            if (skill == null && !skill.GetState().Equals(Skill.state.IDLE))
-                return;
             skill.UseSkill(target);
-            CurrentSkillUsed = skill;
+            //CurrentSkillUsed = skill;
         }
 
         public bool isSkillEquipment(string name)
@@ -254,11 +236,6 @@ namespace FISkill
             return false;
         }
 
-        public bool IsStillUseSkill()
-        {
-            return CurrentSkillUsed == null ? false : true;
-        }
-
         public Skill FindSkill(string skillName)
         {
             Skill skill = null;
@@ -279,21 +256,18 @@ namespace FISkill
         #endregion
         #region Private function
 
-        private void OnTimerFinish(string timerName)
+        private void OnTimerFinish(string timerName, Skill CurrentSkillUsed)
         {
             ListSkillTimers.Remove(timerName);
-            if (CurrentSkillUsed != null)
-                CurrentSkillUsed.SetState(Skill.state.SKILL_FINISH);
+            Anim.SetInteger("Skill", 0);
+            isCanMove = true;
         }
 
-        private void OnDealDamage(string timerName)
+        private void OnDealDamage(string timerName, Skill CurrentSkillUsed)
         {
-            Debug.Log("OnDealDamage");
-
-            if (CurrentSkillUsed == null && !PhotonView.Get(this).IsMine)
+            if (!_pView.IsMine)
                 return;
 
-            CurrentSkillUsed.SetState(Skill.state.GIVING_DAMAGE);
             //DealDamage
             Collider[] allPlayerOverlaped = new Collider[40];
             int numPlayer = Physics.OverlapSphereNonAlloc(transform.position, CurrentSkillUsed.AOERange, allPlayerOverlaped);
@@ -329,7 +303,7 @@ namespace FISkill
                             RaycastHit[] rayLeft;
                             RaycastHit[] rayRight;
 
-                            GetEnemyWithRay(out rayLeft, out rayRight);
+                            GetEnemyWithRay(out rayLeft, out rayRight, CurrentSkillUsed);
                             foreach(RaycastHit hit in rayLeft)
                             {
                                 if(hit.transform.GetComponent<EffectManager>() == damagee)
@@ -358,7 +332,7 @@ namespace FISkill
                             RaycastHit[] rayLeft;
                             RaycastHit[] rayRight;
 
-                            GetEnemyWithRay(out rayLeft, out rayRight);
+                            GetEnemyWithRay(out rayLeft, out rayRight, CurrentSkillUsed);
 
                             foreach (RaycastHit hit in rayLeft)
                             {
@@ -382,7 +356,7 @@ namespace FISkill
             ListSkillTimers.Remove(timerName);
         }
 
-        private void GetEnemyWithRay(out RaycastHit[] hitLeft, out RaycastHit[] hitRight)
+        private void GetEnemyWithRay(out RaycastHit[] hitLeft, out RaycastHit[] hitRight, Skill CurrentSkillUsed)
         {
             float realAngle1 = CurrentSkillUsed.Angle1 > 180 ? 360 - CurrentSkillUsed.Angle1 : CurrentSkillUsed.Angle1;
             Quaternion leftRayRotation = Quaternion.AngleAxis(realAngle1, Vector3.up);
@@ -399,13 +373,13 @@ namespace FISkill
             Debug.DrawLine(transform.position, pos2 , Color.red);
         }
 
-        private bool isCharacterCanUseSkill
-        {
-            get
-            {
-                return CurrentSkillUsed == null && isCapacityIsNotEmpty;
-            }
-        }
+        //private bool isCharacterCanUseSkill
+        //{
+        //    get
+        //    {
+        //        return CurrentSkillUsed == null && isCapacityIsNotEmpty;
+        //    }
+        //}
 
         private void OnSkillUsed(Skill skill)
         {
