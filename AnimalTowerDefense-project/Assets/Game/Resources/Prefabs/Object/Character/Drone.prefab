@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Anim: {fileID: 6599148649382839689}
+  IsMainCharacter: 0
   isCanMove: 0
   weaponCharacter: {fileID: 0}
   TagsCanAttacked: []
@@ -102,6 +103,7 @@ MonoBehaviour:
     Name: Attack
     Range: 10
     isContinousSkill: 1
+    isShowInUI: 1
     TagsCanBeAttacked:
     - Player
     Type: 0
@@ -5349,6 +5351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Anim: {fileID: 6599148649382839689}
+  IsMainCharacter: 0
   isCanMove: 0
   weaponCharacter: {fileID: 914244597530114322}
   TagsCanAttacked: []
@@ -5358,6 +5361,7 @@ MonoBehaviour:
     Name: Guns
     Range: 0
     isContinousSkill: 0
+    isShowInUI: 1
     TagsCanBeAttacked:
     - Player
     Type: 1
@@ -5860,6 +5864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Anim: {fileID: 6599148649382839689}
+  IsMainCharacter: 0
   isCanMove: 0
   weaponCharacter: {fileID: 0}
   TagsCanAttacked: []
@@ -5869,6 +5874,7 @@ MonoBehaviour:
     Name: Attack
     Range: 10
     isContinousSkill: 1
+    isShowInUI: 1
     TagsCanBeAttacked: []
     Type: 0
     AnimationName: 

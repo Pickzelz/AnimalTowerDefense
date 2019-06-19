@@ -14,6 +14,7 @@ namespace FISkill
         SerializedProperty AnimatorProperty;
         SerializedProperty WeaponProperty;
         SerializedProperty TagsCanAttacked;
+        SerializedProperty IsMainCharacterProperty;
         Object Holder;
 
         [SerializeField] TreeViewState SkillTreeState;
@@ -30,6 +31,7 @@ namespace FISkill
             AnimatorProperty = serializedObject.FindProperty("Anim");
             WeaponProperty = serializedObject.FindProperty("weaponCharacter");
             TagsCanAttacked = serializedObject.FindProperty("TagsCanAttacked");
+            IsMainCharacterProperty = serializedObject.FindProperty("IsMainCharacter");
 
             if (SkillTreeState == null)
                 SkillTreeState = new TreeViewState();
@@ -50,6 +52,7 @@ namespace FISkill
             EditorGUILayout.BeginVertical();
             {
                 EditorGUILayout.PropertyField(AnimatorProperty);
+                EditorGUILayout.PropertyField(IsMainCharacterProperty);
                 //EditorGUILayout.PropertyField(WeaponProperty);
                 //EditorGUILayout.PropertyField(TagsCanAttacked);
             }
@@ -103,6 +106,7 @@ namespace FISkill
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("AnimationIndex"));
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("SkillTime"));
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("isCharacterCanMove"));
+                                    EditorGUILayout.PropertyField(prop.FindPropertyRelative("isShowInUI"));
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("SkillCooldown"));
 
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("IsUseDamageHolder"));

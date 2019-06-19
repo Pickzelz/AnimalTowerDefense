@@ -1353,6 +1353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Anim: {fileID: 2364868924554550603}
+  IsMainCharacter: 1
   isCanMove: 0
   weaponCharacter: {fileID: 5700682606832719670}
   TagsCanAttacked:
@@ -1363,6 +1364,7 @@ MonoBehaviour:
     Name: attack
     Range: 0
     isContinousSkill: 0
+    isShowInUI: 0
     TagsCanBeAttacked:
     - Enemy
     Type: 0
@@ -1396,6 +1398,7 @@ MonoBehaviour:
     Name: Slam
     Range: 10
     isContinousSkill: 0
+    isShowInUI: 1
     TagsCanBeAttacked:
     - Enemy
     Type: 0
@@ -1429,6 +1432,7 @@ MonoBehaviour:
     Name: PoisonAttack
     Range: 10
     isContinousSkill: 0
+    isShowInUI: 1
     TagsCanBeAttacked:
     - Enemy
     Type: 0

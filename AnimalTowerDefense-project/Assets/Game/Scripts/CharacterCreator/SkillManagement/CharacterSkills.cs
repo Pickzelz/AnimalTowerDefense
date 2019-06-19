@@ -13,6 +13,8 @@ namespace FISkill
         private UnityEvent _skillUpdate;
 
         public Animator Anim;
+        [SerializeField]private bool IsMainCharacter;
+
         [HideInInspector] public bool isCanMove;
         public WeaponsCharacter weaponCharacter;
         public List<string> TagsCanAttacked;
@@ -41,6 +43,16 @@ namespace FISkill
             isCanMove = true;
             D_onSkillUsed = null;
             _pView = PhotonView.Get(this);
+
+            if(!_pView.IsMine && IsMainCharacter)
+            {
+                IsMainCharacter = false;
+            }
+
+            if(IsMainCharacter)
+            {
+                SkillManager.Instance.RegisterSkills(this);
+            }
 
             ListSkillTimers = new List<string>();
             foreach (Skill skill in Skills)
@@ -79,6 +91,7 @@ namespace FISkill
                 skill.DestroyCallback();
             }
             _skillUpdate.RemoveAllListeners();
+            SkillManager.Instance.UnregisterSkills();
         }
 
         #region Public Function

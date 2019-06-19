@@ -23,6 +23,7 @@ namespace FISkill
         public string Name = "";
         public float Range = 0f;
         public bool isContinousSkill = false;
+        public bool isShowInUI = true;
         public List<string> TagsCanBeAttacked;
         public E_SkillType Type;
 
