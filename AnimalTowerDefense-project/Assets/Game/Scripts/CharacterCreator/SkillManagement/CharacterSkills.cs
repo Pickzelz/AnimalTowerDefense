@@ -111,7 +111,7 @@ namespace FISkill
             Skill skill = FindSkill(SkillName);
             if (skill == null)
                 return;
-            if(skill.IsSkillCanBeUsed())
+            if(skill.IsSkillCanBeUsed() && IsCanUseAnotherSkill())
             {
                 Ray ray = Camera.main.ScreenPointToRay(target);
                 RaycastHit[] hits;
@@ -142,7 +142,7 @@ namespace FISkill
             Skill skill = FindSkill(SkillName);
             if (skill == null)
                 return;
-            if (skill.IsSkillCanBeUsed())
+            if (skill.IsSkillCanBeUsed() && IsCanUseAnotherSkill())
             {
                 if (force)
                     RPCUseSkill(SkillName);
@@ -447,6 +447,18 @@ namespace FISkill
             {
                 if (timer > 0)
                     timer -= Time.deltaTime;
+            }
+        }
+
+        private bool IsCanUseAnotherSkill()
+        {
+            if(Skills.Exists(x => !x.IsCanUseOtherSkill()))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         #endregion

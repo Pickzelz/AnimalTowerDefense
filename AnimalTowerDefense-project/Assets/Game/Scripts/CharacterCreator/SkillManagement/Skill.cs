@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Dictus;
@@ -173,6 +174,11 @@ namespace FISkill
             return GetState() == state.IDLE;
         }
 
+        public bool IsCanUseOtherSkill()
+        {
+            return GetState() == state.IDLE || GetState() == state.WAITING_COOLDOWN || GetState() == state.WAITING_NEXT_SKILL;
+        }
+
         private void CalculateSkill()
         {
             if (!IsAOE)
@@ -227,6 +233,21 @@ namespace FISkill
             TimerManager.Instance.RemoveTimer(_onDealDamageTimerName);
         }
 
+        public float GetCurrentCooldownTime()
+        {
+            float? ret = _time;
+            if(ret != null)
+            {
+                ret = (float)Math.Round((double)ret, 2);
+            }
+            else
+            {
+                ret = 0f;
+            }
+
+            return (float)ret;
+        }
+
         #endregion
 
         #region Private function
@@ -272,7 +293,7 @@ namespace FISkill
             }
             else
             {
-                if (_time > 0)
+                if (_time > 0f)
                     _time -= Time.deltaTime;
             }
         }
