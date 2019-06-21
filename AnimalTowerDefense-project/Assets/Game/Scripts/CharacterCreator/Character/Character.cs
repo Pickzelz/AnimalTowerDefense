@@ -27,14 +27,17 @@ namespace ATD
         private void Awake()
         {
             mr_ = GetComponent<MeshRenderer>();
+            SkillClass.CreateSkillControlMap(ref KeyToActionMap.character);
             actionSet_ = new ActionSet(KeyToActionMap.character);
-            SetCharacterActions(); 
+            SetCharacterActions();
+            SkillClass.CreateSkillControl(ref actionSet_);
         }
 
         private void Start()
         {
             RegisterToAdapter();
             Anim.speed = Statuses.Getvalue("Speed") / 2;
+            SkillClass.Action = actionSet_;
             if (isLocalPlayer)
                 Me = this;
         }
@@ -74,10 +77,10 @@ namespace ATD
             actionSet["moveX-"].SetKeyPressedDelegatedAction(() => { SetHorizontalMovementValue(-1); });
             actionSet["moveX-"].SetKeyUpDelegatedAction(() => { SetHorizontalMovementValue(0); });
 
-            actionSet["FireWeapon"].SetKeyDownDelegatedAction(() => { FireWeapon(); });
-            actionSet["FireWeapon"].SetKeyUpDelegatedAction(() => { UnFireWeapon(); });
+            //actionSet["FireWeapon"].SetKeyDownDelegatedAction(() => { FireWeapon(); });
+            //actionSet["FireWeapon"].SetKeyUpDelegatedAction(() => { UnFireWeapon(); });
+            ////actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
             //actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
-            actionSet["UseSkill"].SetKeyDownDelegatedAction(() => { UseSkill(); });
 
             actionSet["look"].SetContinuousDelegatedAction((Vector3 mousePos) => { Rotate(mousePos); });
         }

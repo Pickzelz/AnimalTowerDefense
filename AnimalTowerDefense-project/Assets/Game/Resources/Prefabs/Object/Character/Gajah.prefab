@@ -1373,6 +1373,7 @@ MonoBehaviour:
     SkillTime: 0.3
     isCharacterCanMove: 1
     SkillCooldown: 0.3
+    ShortcutUI: 323
     Equipments:
       List: []
     DealDamageOnTime: 0
@@ -1395,40 +1396,6 @@ MonoBehaviour:
     colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
     CharacterPhotonView: {fileID: 0}
   - IsCharacterMove: 0
-    Name: Slam
-    Range: 10
-    isContinousSkill: 0
-    isShowInUI: 1
-    TagsCanBeAttacked:
-    - Enemy
-    Type: 0
-    AnimationName: 
-    AnimationIndex: 2
-    SkillTime: 1.2
-    isCharacterCanMove: 1
-    SkillCooldown: 0
-    Equipments:
-      List: []
-    DealDamageOnTime: 1.19
-    Effects:
-    - statusName: Health
-      effect: 1000
-      effectType: 1
-      isEffectCanRecover: 0
-      isEffectPerSecond: 0
-      EffectPerSecond: 0
-      EffectPerSecondTime: 0
-      time: 0
-    IsUseDamageHolder: 0
-    DamageHolder: {fileID: 0}
-    DamageHolderPlaceholder: {fileID: 0}
-    IsAOE: 1
-    AOERange: 5
-    AOEAngle: 360
-    AOEDirection: 0
-    colorAttackArea: {r: 0.14122581, g: 0, b: 1, a: 1}
-    CharacterPhotonView: {fileID: 0}
-  - IsCharacterMove: 0
     Name: PoisonAttack
     Range: 10
     isContinousSkill: 0
@@ -1441,6 +1408,7 @@ MonoBehaviour:
     SkillTime: 0.3
     isCharacterCanMove: 1
     SkillCooldown: 2
+    ShortcutUI: 101
     Equipments:
       List: []
     DealDamageOnTime: 0
@@ -1460,6 +1428,41 @@ MonoBehaviour:
     IsAOE: 0
     AOERange: 0
     AOEAngle: 180
+    AOEDirection: 0
+    colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
+    CharacterPhotonView: {fileID: 0}
+  - IsCharacterMove: 0
+    Name: Slam
+    Range: 0
+    isContinousSkill: 0
+    isShowInUI: 1
+    TagsCanBeAttacked:
+    - Enemy
+    Type: 0
+    AnimationName: 
+    AnimationIndex: 2
+    SkillTime: 1.2
+    isCharacterCanMove: 1
+    SkillCooldown: 3
+    ShortcutUI: 32
+    Equipments:
+      List: []
+    DealDamageOnTime: 1
+    Effects:
+    - statusName: Health
+      effect: 600
+      effectType: 1
+      isEffectCanRecover: 0
+      isEffectPerSecond: 0
+      EffectPerSecond: 0
+      EffectPerSecondTime: 0
+      time: 0
+    IsUseDamageHolder: 0
+    DamageHolder: {fileID: 0}
+    DamageHolderPlaceholder: {fileID: 0}
+    IsAOE: 1
+    AOERange: 10
+    AOEAngle: 360
     AOEDirection: 0
     colorAttackArea: {r: 1, g: 0, b: 0, a: 1}
     CharacterPhotonView: {fileID: 0}

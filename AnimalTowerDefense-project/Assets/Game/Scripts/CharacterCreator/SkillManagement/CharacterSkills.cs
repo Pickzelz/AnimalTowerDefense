@@ -3,6 +3,7 @@ using UnityEngine;
 using ATD;
 using Photon.Pun;
 using UnityEngine.Events;
+using Dictus;
 
 namespace FISkill
 {
@@ -14,7 +15,6 @@ namespace FISkill
 
         public Animator Anim;
         [SerializeField]private bool IsMainCharacter;
-
         [HideInInspector] public bool isCanMove;
         public WeaponsCharacter weaponCharacter;
         public List<string> TagsCanAttacked;
@@ -30,6 +30,8 @@ namespace FISkill
         private bool isCapacityIsNotEmpty;
         private PhotonView _pView;
         private float? timer;
+
+        public ActionSet Action;
 
         private void Awake()
         {
@@ -265,6 +267,33 @@ namespace FISkill
             if (Skills == null)
                 Skills = new List<Skill>();
             return Skills;
+        }
+
+        public void CreateSkillControlMap(ref List<KeyValuePair<string, KeyCode>> inputSet)
+        {
+            foreach(Skill skill in Skills)
+            {
+                inputSet.Add(new KeyValuePair<string, KeyCode>("Skill_" + skill.Name, skill.ShortcutUI));
+            }
+        }
+
+        public void CreateSkillControl(ref ActionSet action) 
+        {
+            foreach(Skill skill in Skills)
+            {
+                if(skill.Type == Skill.E_SkillType.EQUIPMENT)
+                {
+                    UseEquipment(skill.Name).CreateControlAction(ref action);
+                }
+                else
+                {
+                    action["Skill_" + skill.Name].SetKeyPressedDelegatedAction(() => UseSkill(skill.Name, Input.mousePosition));
+                    if (skill.isContinousSkill)
+                    {
+                        action["Skill_" + skill.Name].SetKeyUpDelegatedAction(() => OnFinishContinousSkill(skill.Name));
+                    }
+                }
+            }
         }
         #endregion
         #region Private function

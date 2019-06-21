@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Dictus;
 
 namespace FISkill
 {
@@ -35,6 +34,7 @@ namespace FISkill
         public float SkillTime = 0f;
         public bool isCharacterCanMove = true;
         public float SkillCooldown = 0f;
+        public KeyCode ShortcutUI;
 
         [Header("Character Weapon")]
         public Equipments Equipments = null;
@@ -303,6 +303,14 @@ namespace FISkill
             foreach (CharacterSkills c_skill in List)
             {
                 c_skill.OnFinishContinousSkill(NameSkill);
+            }
+        }
+
+        public void CreateControlAction(ref ActionSet action)
+        {
+            foreach (CharacterSkills c_skill in List)
+            {
+                c_skill.CreateSkillControl(ref action);
             }
         }
     }

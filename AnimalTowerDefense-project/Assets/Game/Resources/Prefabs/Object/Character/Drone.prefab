@@ -112,6 +112,7 @@ MonoBehaviour:
     SkillTime: 0.4
     isCharacterCanMove: 1
     SkillCooldown: 0.5
+    ShortcutUI: 0
     Equipments:
       List: []
     DealDamageOnTime: 0
@@ -5370,6 +5371,7 @@ MonoBehaviour:
     SkillTime: 0
     isCharacterCanMove: 1
     SkillCooldown: 0
+    ShortcutUI: 0
     Equipments:
       List:
       - {fileID: 3975754363755467718}
@@ -5882,6 +5884,7 @@ MonoBehaviour:
     SkillTime: 0.4
     isCharacterCanMove: 1
     SkillCooldown: 0
+    ShortcutUI: 0
     Equipments:
       List: []
     DealDamageOnTime: 0

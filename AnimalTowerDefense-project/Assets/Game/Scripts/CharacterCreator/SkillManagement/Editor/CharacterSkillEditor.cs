@@ -54,7 +54,7 @@ namespace FISkill
                 EditorGUILayout.PropertyField(AnimatorProperty);
                 EditorGUILayout.PropertyField(IsMainCharacterProperty);
                 //EditorGUILayout.PropertyField(WeaponProperty);
-                //EditorGUILayout.PropertyField(TagsCanAttacked);
+                //EditorGUILayout.PropertyFieldvc(TagsCanAttacked);
             }
             EditorGUILayout.EndVertical();
 
@@ -64,6 +64,8 @@ namespace FISkill
             }
             for (int i = 0; i < SkillsProperty.arraySize; i++)
             {
+                //if(i > ChSkill.GetAllSkills().Count)
+                //    break;
                 SerializedProperty prop = SkillsProperty.GetArrayElementAtIndex(i);
                 Skill _skills = ChSkill.GetAllSkills()[i];
                 RepairVariable(ref _skills);
@@ -108,6 +110,7 @@ namespace FISkill
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("isCharacterCanMove"));
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("isShowInUI"));
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("SkillCooldown"));
+                                    EditorGUILayout.PropertyField(prop.FindPropertyRelative("ShortcutUI"));
 
                                     EditorGUILayout.PropertyField(prop.FindPropertyRelative("IsUseDamageHolder"));
                                     if (_skills.IsUseDamageHolder)
