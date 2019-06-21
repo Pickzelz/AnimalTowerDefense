@@ -10,7 +10,7 @@ namespace ATD
     {
         public GameObject PlayerPrefab;
 
-        [HideInInspector] GameObject Player;
+        [HideInInspector] public GameObject MainPlayer { get; private set; }
 
         public List<GameObject> Players { get; set; }
 
@@ -21,7 +21,7 @@ namespace ATD
         void Start()
         {
             Players = new List<GameObject>();
-            GameObject player = PhotonNetwork.Instantiate("Prefabs/Object/Character/" + PlayerPrefab.name, new Vector3(0f, 1f, 0f), Quaternion.identity, 0);
+            MainPlayer = PhotonNetwork.Instantiate("Prefabs/Object/Character/" + PlayerPrefab.name, new Vector3(0f, 1f, 0f), Quaternion.identity, 0);
         }
 
         private void OnDestroy()
