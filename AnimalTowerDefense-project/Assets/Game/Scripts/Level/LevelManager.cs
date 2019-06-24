@@ -8,9 +8,11 @@ namespace ATD
 {
     public class LevelManager : Singleton<LevelManager>
     {
+        public enum state { IDLE, PLAYING, FINISH }
         public GameObject PlayerPrefab;
 
         [HideInInspector] public GameObject MainPlayer { get; private set; }
+
 
         public List<GameObject> Players { get; set; }
 
@@ -24,8 +26,9 @@ namespace ATD
             MainPlayer = PhotonNetwork.Instantiate("Prefabs/Object/Character/" + PlayerPrefab.name, new Vector3(0f, 1f, 0f), Quaternion.identity, 0);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             Players.Clear();
         }
         protected override void Init()

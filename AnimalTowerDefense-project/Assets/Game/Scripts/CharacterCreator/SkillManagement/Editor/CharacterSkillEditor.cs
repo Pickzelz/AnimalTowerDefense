@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.IMGUI.Controls;
 
 namespace FISkill
 {
@@ -17,15 +16,18 @@ namespace FISkill
         SerializedProperty IsMainCharacterProperty;
         Object Holder;
 
-        [SerializeField] TreeViewState SkillTreeState;
         SkillTreeEditor SkillTreeView;
         List<bool> CollapseSkills;
+
+        List<EffectsListEditor> EffectsList;
 
         GUISkin skin;
         int currentActive = -1;
 
         private void OnEnable()
         {
+            ChSkill = this.target as CharacterSkills;
+            CharacterStatus status = ChSkill.gameObject.GetComponent<CharacterStatus>();
             CollapseSkills = new List<bool>();
             SkillsProperty = serializedObject.FindProperty("Skills");
             AnimatorProperty = serializedObject.FindProperty("Anim");
@@ -33,18 +35,24 @@ namespace FISkill
             TagsCanAttacked = serializedObject.FindProperty("TagsCanAttacked");
             IsMainCharacterProperty = serializedObject.FindProperty("IsMainCharacter");
 
-            if (SkillTreeState == null)
-                SkillTreeState = new TreeViewState();
+            if (EffectsList == null)
+                EffectsList = new List<EffectsListEditor>();
 
             skin = (GUISkin)Resources.Load("Skin");
-            //SkillTreeView = new SkillTreeEditor(SkillTreeState);
 
+            for (int i = 0; i < SkillsProperty.arraySize; i++)
+            {
+                SerializedProperty prop = SkillsProperty.GetArrayElementAtIndex(i);
+                EffectsList.Add(new EffectsListEditor(prop.FindPropertyRelative("Effects"), ChSkill.GetAllSkills()[i].Effects, status));
+            }
         }
 
         public override void OnInspectorGUI()
         {
             //base.OnInspectorGUI();
             serializedObject.Update();
+            
+            
             ChSkill = this.target as CharacterSkills;
             GUIStyle styleButtonDelete = new GUIStyle("Button");
             styleButtonDelete.fixedWidth = 50;
@@ -53,6 +61,10 @@ namespace FISkill
             {
                 EditorGUILayout.PropertyField(AnimatorProperty);
                 EditorGUILayout.PropertyField(IsMainCharacterProperty);
+                if (GUILayout.Button("Show Editor"))
+                {
+                    SkillWindows.ShowWindow(ChSkill.gameObject);
+                }
                 //EditorGUILayout.PropertyField(WeaponProperty);
                 //EditorGUILayout.PropertyFieldvc(TagsCanAttacked);
             }
@@ -118,15 +130,16 @@ namespace FISkill
                                         EditorGUILayout.PropertyField(prop.FindPropertyRelative("DamageHolder"));
                                         EditorGUILayout.PropertyField(prop.FindPropertyRelative("DealDamageOnTime"));
                                         EditorGUILayout.PropertyField(prop.FindPropertyRelative("DamageHolderPlaceholder"));
-
-                                        string[] effectProperties = { "statusName", "effect", "effectType", "isEffectPerSecond", "EffectPerSecond", "EffectPerSecondTime", "time" };
-                                        DrawArrayProperties<Effect>(prop.FindPropertyRelative("Effects"), ref _skills.Effects, "Add Effect", effectProperties);
+                                        EffectsList[i].DrawEditor();
+                                        //string[] effectProperties = { "statusName", "effect", "effectType", "isEffectPerSecond", "EffectPerSecond", "EffectPerSecondTime", "time" };
+                                        //DrawArrayProperties<Effect>(prop.FindPropertyRelative("Effects"), ref _skills.Effects, "Add Effect", effectProperties);
                                     }
                                     else
                                     {
                                         //EditorGUILayout.PropertyField(prop.FindPropertyRelative("Damage"));
-                                        string[] effectProperties = { "statusName", "effect", "effectType", "isEffectPerSecond", "EffectPerSecond", "EffectPerSecondTime", "time"};
-                                        DrawArrayProperties<Effect>(prop.FindPropertyRelative("Effects"), ref _skills.Effects,"Add Effect", effectProperties);
+                                        //string[] effectProperties = { "statusName", "effect", "effectType", "isEffectPerSecond", "EffectPerSecond", "EffectPerSecondTime", "time"};
+                                        //DrawArrayProperties<Effect>(prop.FindPropertyRelative("Effects"), ref _skills.Effects,"Add Effect", effectProperties);
+                                        EffectsList[i].DrawEditor();
                                         EditorGUILayout.PropertyField(prop.FindPropertyRelative("DealDamageOnTime"));
                                         EditorGUILayout.PropertyField(prop.FindPropertyRelative("IsAOE"));
                                         if (_skills.IsAOE)
