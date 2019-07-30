@@ -315,7 +315,7 @@ namespace FISkill
         {
             foreach(CharacterSkills c_skill in List)
             {
-                c_skill.UseSkill(NameSkill);
+                c_skill.Use(NameSkill);
             }
         }
 

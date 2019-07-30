@@ -5260,6 +5260,7 @@ GameObject:
   - component: {fileID: 164796551852326023}
   - component: {fileID: 7861654988134243116}
   - component: {fileID: 9168074070631597983}
+  - component: {fileID: 5187844037726243909}
   m_Layer: 10
   m_Name: Drone
   m_TagString: Enemy
@@ -5405,6 +5406,7 @@ MonoBehaviour:
   skills: {fileID: 5721408944625455190}
   Health: 100
   Statuses: {fileID: 9168074070631597983}
+  dropManager: {fileID: 5187844037726243909}
   MPPlayer: {fileID: 7613297503788743323}
 --- !u!114 &914244597530114322
 MonoBehaviour:
@@ -5557,6 +5559,28 @@ MonoBehaviour:
     value: 5
     max: 100
     min: 0
+--- !u!114 &5187844037726243909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999314791798249387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c47f030bb6364fb4dabc7f1a56a3175c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Drops:
+  - Weight: 3
+    Item: {fileID: 0}
+  - Weight: 5
+    Item: {fileID: 719949609349308755, guid: b97f56be2ae240a419036b485b0dd651, type: 3}
+  - Weight: 3
+    Item: {fileID: 2472794292710097267, guid: 01e982ef20b195342bd79f93fc07a59a, type: 3}
+  - Weight: 1
+    Item: {fileID: 8716290703531966858, guid: 769df74ebd8a96e4c993de8a4ad97e38, type: 3}
+  EmptyDropWeight: 0
 --- !u!1 &5563927773650813308
 GameObject:
   m_ObjectHideFlags: 0

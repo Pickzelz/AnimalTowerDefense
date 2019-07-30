@@ -4,6 +4,8 @@ using UnityEngine.AI;
 using Multiplayer;
 using Photon.Pun;
 using FISkill;
+using ATD.Statuses;
+using Game.Item;
 
 namespace ATD
 {
@@ -15,7 +17,8 @@ namespace ATD
         [SerializeField] private CharacterSkills skills;
         [SerializeField] private float Health;
         [SerializeField] private CharacterStatus Statuses;
-
+        [SerializeField] private ItemDropManager dropManager;
+         
         [SerializeField] private MultiplayerPlayerManager MPPlayer;
 
         private bool isLocalPlayer = true;
@@ -81,6 +84,7 @@ namespace ATD
         [PunRPC]
         private void OnDeath()
         {
+            dropManager.DropItem();
             Destroy(gameObject);
         }
 

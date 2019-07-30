@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using ATD.Statuses;
 
 namespace FISkill
 {

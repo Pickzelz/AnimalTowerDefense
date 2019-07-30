@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using ATD.Statuses;
 namespace FISkill
 {
     [System.Serializable]

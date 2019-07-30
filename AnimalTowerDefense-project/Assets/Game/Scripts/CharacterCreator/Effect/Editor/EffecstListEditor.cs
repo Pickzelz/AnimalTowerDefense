@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using ATD.Statuses;
 namespace FISkill
 {
     public class EffectsListEditor

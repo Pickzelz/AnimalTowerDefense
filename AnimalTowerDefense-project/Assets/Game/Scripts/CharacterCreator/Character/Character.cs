@@ -4,6 +4,7 @@ using Dictus;
 using Multiplayer;
 using Photon.Pun;
 using FISkill;
+using ATD.Statuses;
 
 namespace ATD
 {
@@ -21,7 +22,6 @@ namespace ATD
         public Animator Anim;
         public CharacterSkills SkillClass;
         public CharacterStatus Statuses;
-
         public static Character Me = null;
 
         private void Awake()
@@ -133,7 +133,7 @@ namespace ATD
             if (!isLocalPlayer)
                 return;
 
-            SkillClass.UseSkill("attack");
+            SkillClass.Use("attack");
 
             //primaryWep_.SpawnHitboxes();
         }
@@ -151,7 +151,7 @@ namespace ATD
             if (!isLocalPlayer)
                 return;
             
-            SkillClass.UseSkill("PoisonAttack", Input.mousePosition);
+            SkillClass.Use("PoisonAttack", Input.mousePosition);
             //secondaryWep_.SpawnHitboxes();
         }
 

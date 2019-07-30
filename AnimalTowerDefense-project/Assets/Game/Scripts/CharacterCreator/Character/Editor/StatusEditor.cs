@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using ATD.Statuses;
 namespace FISkill
 {
     [CustomEditor(typeof(CharacterStatus))]

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using ATD;
+using ATD.Statuses;
 
 namespace FISkill
 {
@@ -10,10 +11,10 @@ namespace FISkill
         private CharacterStatus _characterStatus { get; set; } = null;
 
         public UISkillsContainer SkillUI;
-        public void RegisterSkills(CharacterSkills skills)
+        public void RegisterSkills(Actions skills)
         {
-            _characterSkill = skills;
-            SkillUI.DrawSkillUI(skills);
+            _characterSkill = skills as CharacterSkills;
+            SkillUI.DrawSkillUI(_characterSkill);
         }
 
         public void UnregisterSkills()

@@ -6,17 +6,20 @@ namespace ATD
 {
     public class CameraManager : MonoBehaviour
     {
-        [SerializeField] private float DistanceWithObject;
-        [SerializeField] private float DistanceWithObjectBottom;
+        [SerializeField] private Vector3 offset;
+        [SerializeField] private float currentZoom;
+        [SerializeField] private float pitch = 2f;
+
         // Update is called once per frame
+
+
         void Update()
         {
             if(Character.Me != null)
             {
-                Vector3 chPosition = Character.Me.transform.position;
-                chPosition.y = DistanceWithObject;
-                chPosition.z += DistanceWithObjectBottom;
+                Vector3 chPosition = Character.Me.transform.position - offset * currentZoom;
                 transform.position = chPosition;
+                transform.LookAt(Character.Me.transform.position + Vector3.up * pitch);
             }
         }
     }

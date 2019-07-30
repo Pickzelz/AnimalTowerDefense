@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-namespace FISkill
+
+namespace ATD.Properties
 {
-    public class CharacterStatus : MonoBehaviourPunCallbacks, IPunObservable
+    public class ObjectProperties : MonoBehaviourPunCallbacks, IPunObservable
     {
         public enum EChangeStatusType { UP, DOWN, CHANGE }
         [System.Serializable]
@@ -37,17 +39,17 @@ namespace FISkill
         [SerializeField] public List<Status> StatusArray;
 
         // Start is called before the first frame update
-        void Awake()
-        {
-            //if (StatusArray == null)
-            //    StatusArray = new List<Status>();
-        }
-        private void Start()
-        {
-            
-        }
+        //void Awake()
+        //{
+        //    //if (StatusArray == null)
+        //    //    StatusArray = new List<Status>();
+        //}
+        //private void Start()
+        //{
 
-        public Status GetStatus(string key)
+        //}
+
+        public virtual Status GetStatus(string key)
         {
             if (StatusArray.Exists(x => x.key == key))
                 return StatusArray.Find(x => x.key == key);
@@ -55,7 +57,7 @@ namespace FISkill
                 return null;
         }
 
-        public float Getvalue(string key)
+        public virtual float Getvalue(string key)
         {
             Status status = GetStatus(key);
             if (status != null)
@@ -68,11 +70,11 @@ namespace FISkill
             }
         }
 
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            if(stream.IsWriting)
+            if (stream.IsWriting)
             {
-                foreach(Status stat in StatusArray)
+                foreach (Status stat in StatusArray)
                 {
                     stream.SendNext(stat.value);
                 }
@@ -86,17 +88,17 @@ namespace FISkill
             }
         }
 
-        public void ChangeStatus(string key, float value, EChangeStatusType changeType = EChangeStatusType.UP)
+        public virtual void ChangeStatus(string key, float value, EChangeStatusType changeType = EChangeStatusType.UP)
         {
             if (!photonView.IsMine)
                 return;
             Status status = GetStatus(key);
-            Debug.Log("Status " + status.key + " Change " + value);
+            //Debug.Log("Status " + status.key + " Change " + value);
             ChangeStatus(status, value, changeType);
             PhotonView view = PhotonView.Get(this);
         }
 
-        public void ChangeStatus(Status status, float value, EChangeStatusType changeType = EChangeStatusType.UP)
+        public virtual void ChangeStatus(Status status, float value, EChangeStatusType changeType = EChangeStatusType.UP)
         {
             if (status != null)
             {
@@ -123,5 +125,4 @@ namespace FISkill
             }
         }
     }
-
 }
